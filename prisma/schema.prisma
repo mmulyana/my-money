@@ -14,15 +14,23 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(ulid())
-  email         String    @unique
+  id            String  @id @default(ulid())
+  email         String  @unique
   name          String
   emailVerified Boolean
   image         String?
-  createdAt     DateTime
-  updatedAt     DateTime
-  sessions      Session[]
-  accounts      Account[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessions    Session[]
+  accounts    Account[]
+  wallet      Wallet[]
+  category    Category[]
+  budget      Budget[]
+  debt        Debt[]
+  recurring   Recurring[]
+  transaction Transaction[]
 
   @@map("user")
 }
@@ -71,4 +79,93 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
+}
+
+model Wallet {
+  id           String        @id @default(uuid())
+  name         String
+  currency     String
+  balance      Int           @default(0)
+  userId       String
+  user         User          @relation(fields: [userId], references: [id])
+  transactions Transaction[]
+}
+
+model Transaction {
+  id         String          @id @default(uuid())
+  amount     Int
+  type       TransactionType
+  note       String?
+  date       DateTime
+  categoryId String?
+  walletId   String?
+  userId     String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  category Category? @relation(fields: [categoryId], references: [id])
+  wallet   Wallet?   @relation(fields: [walletId], references: [id])
+  user     User      @relation(fields: [userId], references: [id])
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+model Category {
+  id           String          @id @default(uuid())
+  name         String
+  icon         String?
+  type         TransactionType
+  userId       String
+  user         User            @relation(fields: [userId], references: [id])
+  transactions Transaction[]
+  budgets      Budget[]
+  recurring    Recurring[]
+}
+
+model Budget {
+  id         String   @id @default(uuid())
+  amount     Int
+  startDate  DateTime
+  endDate    DateTime
+  categoryId String
+  userId     String
+  category   Category @relation(fields: [categoryId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
+}
+
+model Debt {
+  id        String   @id @default(uuid())
+  amount    Int
+  note      String?
+  isLent    Boolean // true = piutang, false = utang
+  dueDate   DateTime
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Recurring {
+  id         String             @id @default(uuid())
+  amount     Int
+  type       TransactionType
+  note       String?
+  interval   RecurrenceInterval
+  categoryId String
+  userId     String
+  date       String?
+
+  category Category @relation(fields: [categoryId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+}
+
+enum RecurrenceInterval {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
 }

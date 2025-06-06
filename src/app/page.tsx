@@ -1,5 +1,7 @@
 import SignOut from '@/components/common/sign-out'
 import { buttonVariants } from '@/components/ui/button'
+import AddTransactionDrawer from '@/features/transaction/components/add-transaction-drawer'
+import TransactionTable from '@/features/transaction/components/transaction-table'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
 import Image from 'next/image'
@@ -60,6 +62,8 @@ export default async function Home() {
 						</Link>
 					</div>
 				)}
+				<TransactionTable />
+				<AddTransactionDrawer />
 			</main>
 			<footer className='row-start-3 flex gap-[24px] flex-wrap items-center justify-center'>
 				<a
