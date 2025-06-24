@@ -19,6 +19,11 @@ export const readAll = protectedProcedure.query(async ({ ctx }) => {
     },
     include: {
       category: true,
+      user: {
+        select: {
+          name: true,
+        },
+      },
     },
     orderBy: {
       date: "desc",

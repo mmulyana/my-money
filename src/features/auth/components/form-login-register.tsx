@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
-import { authClient } from "~/utils/auth-client";
+import { authClient } from "~/lib/utils/auth-client";
 import type { ErrorContext } from "better-auth/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";

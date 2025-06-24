@@ -16,7 +16,7 @@ async function main() {
       { name: "Investment", color: "#8E44AD" },
       { name: "Others", color: "#95A5A6" },
     ],
-    skipDuplicates: true, // Optional: mencegah error kalau data udah ada
+    skipDuplicates: true,
   });
 
   console.log("✅ Categories seeded successfully.");
