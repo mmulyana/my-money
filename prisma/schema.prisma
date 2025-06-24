@@ -1,37 +1,36 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
-model User {
-  id            String  @id @default(ulid())
-  email         String  @unique
-  name          String
-  emailVerified Boolean
-  image         String?
-
+model Post {
+  id        Int      @id @default(autoincrement())
+  name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  sessions    Session[]
-  accounts    Account[]
-  wallet      Wallet[]
-  category    Category[]
-  budget      Budget[]
-  debt        Debt[]
-  recurring   Recurring[]
-  transaction Transaction[]
+  @@index([name])
+}
 
+model User {
+  id            String   @id
+  name          String
+  email         String
+  emailVerified Boolean
+  image         String?
+  createdAt     DateTime
+  updatedAt     DateTime
+
+  sessions     Session[]
+  accounts     Account[]
+  transactions Transaction[]
+  categories   Category[]
+
+  @@unique([email])
   @@map("user")
 }
 
@@ -43,9 +42,8 @@ model Session {
   updatedAt DateTime
   ipAddress String?
   userAgent String?
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([token])
   @@map("session")
@@ -81,91 +79,34 @@ model Verification {
   @@map("verification")
 }
 
-model Wallet {
-  id           String        @id @default(uuid())
-  name         String
-  currency     String
-  balance      Int           @default(0)
-  userId       String
-  user         User          @relation(fields: [userId], references: [id])
-  transactions Transaction[]
-}
-
 model Transaction {
-  id         String          @id @default(uuid())
+  id         String          @id @default(ulid())
+  note       String?
+  categoryId String
+  createdBy  String
   amount     Int
   type       TransactionType
-  note       String?
-  date       DateTime
-  categoryId String?
-  walletId   String?
-  userId     String
+  date       DateTime?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 
-  category Category? @relation(fields: [categoryId], references: [id])
-  wallet   Wallet?   @relation(fields: [walletId], references: [id])
-  user     User      @relation(fields: [userId], references: [id])
+  user     User     @relation(fields: [createdBy], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+}
+
+model Category {
+  id        String  @id @default(ulid())
+  name      String
+  color     String
+  createdBy String?
+
+  user User? @relation(fields: [createdBy], references: [id])
+
+  transactions Transaction[]
 }
 
 enum TransactionType {
   INCOME
   EXPENSE
-}
-
-model Category {
-  id           String          @id @default(uuid())
-  name         String
-  icon         String?
-  type         TransactionType
-  userId       String
-  user         User            @relation(fields: [userId], references: [id])
-  transactions Transaction[]
-  budgets      Budget[]
-  recurring    Recurring[]
-}
-
-model Budget {
-  id         String   @id @default(uuid())
-  amount     Int
-  startDate  DateTime
-  endDate    DateTime
-  categoryId String
-  userId     String
-  category   Category @relation(fields: [categoryId], references: [id])
-  user       User     @relation(fields: [userId], references: [id])
-}
-
-model Debt {
-  id        String   @id @default(uuid())
-  amount    Int
-  note      String?
-  isLent    Boolean // true = piutang, false = utang
-  dueDate   DateTime
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Recurring {
-  id         String             @id @default(uuid())
-  amount     Int
-  type       TransactionType
-  note       String?
-  interval   RecurrenceInterval
-  categoryId String
-  userId     String
-  date       String?
-
-  category Category @relation(fields: [categoryId], references: [id])
-  user     User     @relation(fields: [userId], references: [id])
-}
-
-enum RecurrenceInterval {
-  DAILY
-  WEEKLY
-  MONTHLY
-  YEARLY
 }
