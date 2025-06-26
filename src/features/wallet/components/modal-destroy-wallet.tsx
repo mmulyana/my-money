@@ -13,7 +13,7 @@ import {
 import { Button } from '~/components/ui/button'
 import { api } from '~/trpc/react'
 
-export function ModalDestroyTransaction({
+export function ModalDestroyWallet({
   callback,
   id,
 }: {
@@ -23,9 +23,9 @@ export function ModalDestroyTransaction({
   const [open, setOpen] = useState(false)
   const utils = api.useUtils()
 
-  const destroy = api.transaction.destroy.useMutation({
+  const destroy = api.wallet.destroy.useMutation({
     onSuccess: () => {
-      utils.transaction.invalidate()
+      utils.wallet.invalidate()
       setOpen(false)
       callback?.()
     },
@@ -42,8 +42,8 @@ export function ModalDestroyTransaction({
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete
-            transaction and remove our servers.
+            This action cannot be undone. This will permanently delete your wallet
+            and transactions.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

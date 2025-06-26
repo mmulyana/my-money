@@ -1,41 +1,41 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Plus } from "lucide-react";
-import { useState } from "react";
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { Plus } from 'lucide-react'
+import { useState } from 'react'
 
-import { Button } from "~/components/ui/button";
+import { Button } from '~/components/ui/button'
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogTrigger,
-} from "~/components/ui/dialog";
+} from '~/components/ui/dialog'
 
-import { transactionSchema, type TransactionFormSchema } from "../schema";
-import { TransactionForm } from "./form-transaction";
-import { api } from "~/trpc/react";
+import { transactionSchema, type TransactionFormSchema } from '../schema'
+import { TransactionForm } from './form-transaction'
+import { api } from '~/trpc/react'
 
 export default function ModalAddTransaction() {
-  const [open, setOpen] = useState(false);
-  const utils = api.useUtils();
+  const [open, setOpen] = useState(false)
+  const utils = api.useUtils()
 
   const form = useForm<TransactionFormSchema>({
     resolver: zodResolver(transactionSchema),
     defaultValues: {
       amount: 0,
-      type: "EXPENSE",
+      type: 'EXPENSE',
     },
-  });
+  })
 
   const create = api.transaction.create.useMutation({
     onSuccess: () => {
-      utils.transaction.invalidate();
-      form.reset();
-      setOpen(false);
+      utils.transaction.invalidate()
+      form.reset()
+      setOpen(false)
     },
-  });
+  })
 
-  const category = api.category.readAll.useQuery();
+  const category = api.category.readAll.useQuery()
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -58,5 +58,5 @@ export default function ModalAddTransaction() {
         </div>
       </DialogContent>
     </Dialog>
-  );
+  )
 }

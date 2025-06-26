@@ -1,18 +1,17 @@
 'use client'
 
 import { api } from '~/trpc/react'
-import ModalAddCategory from './modal-add-category'
 import { Skeleton } from '~/components/ui/skeleton'
-import ModalEditCategory from './modal-edit-category'
+import ModalWallet from './modal-wallet'
 
-export default function CardCategory() {
-  const { data, isPending } = api.category.readAll.useQuery()
+export default function CardWallet() {
+  const { data, isPending } = api.wallet.readAll.useQuery()
 
   return (
     <div className="relative max-w-xl space-y-2.5 rounded-lg border bg-white pb-4">
       <div className="flex items-center justify-between px-4 pt-2">
-        <p>Transaction</p>
-        <ModalAddCategory />
+        <p>Wallet</p>
+        <ModalWallet variant="add" />
       </div>
       {isPending ? (
         <div className="space-y-4">
@@ -23,7 +22,7 @@ export default function CardCategory() {
         </div>
       ) : (
         <div className="space-y-4 px-4">
-          {data?.map((i) => <ModalEditCategory key={i.id} data={i} />)}
+          {data?.map((i) => <ModalWallet variant="edit" key={i.id} data={i} />)}
         </div>
       )}
     </div>

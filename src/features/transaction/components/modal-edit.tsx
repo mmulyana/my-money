@@ -14,7 +14,6 @@ import {
 import { transactionSchema, type TransactionFormSchema } from "../schema";
 import { TransactionForm } from "./form-transaction";
 import { api } from "~/trpc/react";
-import TransactionItem from "./transaction-item";
 
 export default function ModalEditTransaction({
   data,
