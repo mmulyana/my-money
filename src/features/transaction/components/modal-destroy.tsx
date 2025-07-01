@@ -26,6 +26,7 @@ export function ModalDestroyTransaction({
   const destroy = api.transaction.destroy.useMutation({
     onSuccess: () => {
       utils.transaction.invalidate()
+      utils.wallet.invalidate()
       setOpen(false)
       callback?.()
     },

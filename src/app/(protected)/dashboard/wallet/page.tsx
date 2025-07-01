@@ -1,11 +1,13 @@
 'use client'
 
-import CardWallet from '~/features/wallet/components/card-wallet'
+import ModalWallet from '~/features/wallet/components/modal-wallet'
+import WidgetWallet from '~/features/wallet/components/widget-wallet'
 
 export default function Page() {
   return (
-    <>
-      <CardWallet />
-    </>
+    <div className="mx-auto max-w-lg">
+      <WidgetWallet />
+      <ModalWallet variant="add" />
+    </div>
   )
 }

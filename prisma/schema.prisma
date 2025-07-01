@@ -119,6 +119,17 @@ model Wallet {
   name      String
   createdBy String
 
-  user        User          @relation(fields: [createdBy], references: [id])
+  user         User          @relation(fields: [createdBy], references: [id])
   transactions Transaction[]
+  total        TotalWallet[]
+}
+
+model TotalWallet {
+  id       String @id @default(ulid())
+  walletId String
+  month    Int
+  year     Int
+  total    Int
+
+  wallet Wallet @relation(fields: [walletId], references: [id])
 }

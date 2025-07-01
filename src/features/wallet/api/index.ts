@@ -23,14 +23,39 @@ export const update = protectedProcedure
       where: { id: input.id },
     })
   })
-export const readAll = protectedProcedure.query(async ({ ctx }) => {
-  const wallets = ctx.db.wallet.findMany({
+export const readAll = protectedProcedure.query(async ({ ctx, input }) => {
+  const wallets = await ctx.db.wallet.findMany({
     where: {
       createdBy: ctx.user.id,
     },
   })
+
   return wallets
 })
+export const readAllWithTotal = protectedProcedure
+  .input(
+    z.object({
+      month: z.number().min(1).max(12),
+      year: z.number(),
+    }),
+  )
+  .query(async ({ ctx, input }) => {
+    const wallets = await ctx.db.wallet.findMany({
+      where: {
+        createdBy: ctx.user.id,
+      },
+      include: {
+        total: {
+          where: {
+            month: input.month,
+            year: input.year,
+          },
+        },
+      },
+    })
+
+    return wallets
+  })
 export const destroy = protectedProcedure
   .input(z.object({ id: z.string() }))
   .mutation(async ({ ctx, input }) => {

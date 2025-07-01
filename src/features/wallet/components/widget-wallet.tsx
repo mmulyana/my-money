@@ -1,10 +1,24 @@
 'use client'
 
+import { useAtomValue } from 'jotai'
 import { Wallet } from 'lucide-react'
+import { currentMonthAtom, currentYearAtom } from '~/shared/stores/atom-date'
 import { api } from '~/trpc/react'
 
 export default function WidgetWallet() {
-  const { data } = api.wallet.readAll.useQuery()
+  const month = useAtomValue(currentMonthAtom)
+  const year = useAtomValue(currentYearAtom)
+
+  const { data } = api.wallet.readAllWithTotal.useQuery(
+    {
+      month,
+      year,
+    },
+    {
+      enabled: !!month && !!year,
+    },
+  )
+
   return (
     <div className="rounded-xl border bg-white px-6 pt-5 pb-6">
       <p className="text-gray-800">My Wallets</p>
@@ -17,6 +31,7 @@ export default function WidgetWallet() {
               </div>
               <p>{i.name}</p>
             </div>
+            <p>{i.total[0]?.total}</p>
           </div>
         ))}
       </div>

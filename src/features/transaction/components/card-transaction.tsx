@@ -7,6 +7,8 @@ import { api } from '~/trpc/react'
 import WalletSelect from '~/features/wallet/components/wallet-select'
 import { cn } from '~/lib/utils'
 import { useMemo } from 'react'
+import { getMonths } from '~/shared/helper/month'
+import MonthSelect from '~/components/common/month-select'
 
 export default function CardTransaction() {
   const { data, isPending } = api.transaction.readAll.useQuery()
@@ -64,6 +66,7 @@ export default function CardTransaction() {
     >
       <div className="flex items-center justify-between px-4 pb-4">
         <WalletSelect />
+        <MonthSelect />
       </div>
 
       <div className="mb-4 flex items-center justify-between gap-6 px-4">

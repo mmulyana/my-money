@@ -1,4 +1,10 @@
-import { create, destroy, readAll, update } from '~/features/wallet/api'
+import {
+  create,
+  destroy,
+  readAll,
+  readAllWithTotal,
+  update,
+} from '~/features/wallet/api'
 import { createTRPCRouter } from '../trpc'
 
 export const walletRouter = createTRPCRouter({
@@ -6,4 +12,5 @@ export const walletRouter = createTRPCRouter({
   create,
   update,
   destroy,
+  readAllWithTotal,
 })

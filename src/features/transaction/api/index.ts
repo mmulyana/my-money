@@ -1,17 +1,22 @@
-import { protectedProcedure } from "~/trpc/helper";
-import { transactionSchema } from "../schema";
-import { z } from "zod";
+import { protectedProcedure } from '~/trpc/helper'
+import { transactionSchema } from '../schema'
+import { z } from 'zod'
+import { updateTotalWallet } from '~/features/wallet/helper'
 
 export const create = protectedProcedure
   .input(transactionSchema)
   .mutation(async ({ ctx, input }) => {
-    return ctx.db.transaction.create({
+    const transaction = await ctx.db.transaction.create({
       data: {
         ...input,
         createdBy: ctx.session.user.id,
       },
-    });
-  });
+    })
+    if (transaction.date) {
+      await updateTotalWallet(ctx.db, transaction.walletId, transaction.date)
+    }
+    return transaction
+  })
 export const readAll = protectedProcedure.query(async ({ ctx }) => {
   const transactions = await ctx.db.transaction.findMany({
     where: {
@@ -26,12 +31,12 @@ export const readAll = protectedProcedure.query(async ({ ctx }) => {
       },
     },
     orderBy: {
-      date: "desc",
+      date: 'desc',
     },
-  });
+  })
 
-  return transactions ?? [];
-});
+  return transactions ?? []
+})
 export const read = protectedProcedure
   .input(z.object({ id: z.string() }))
   .query(async ({ ctx, input }) => {
@@ -42,23 +47,31 @@ export const read = protectedProcedure
       include: {
         category: true,
       },
-    });
+    })
 
-    return data;
-  });
+    return data
+  })
 export const destroy = protectedProcedure
   .input(z.object({ id: z.string() }))
   .mutation(async ({ ctx, input }) => {
-    return ctx.db.transaction.delete({
+    const transaction = await ctx.db.transaction.delete({
       where: { id: input.id },
-    });
-  });
+    })
+    if (transaction.date) {
+      await updateTotalWallet(ctx.db, transaction.walletId, transaction.date)
+    }
+    return transaction
+  })
 export const update = protectedProcedure
   .input(transactionSchema.extend({ id: z.string() }))
   .mutation(async ({ ctx, input }) => {
-    const { id, ...rest } = input;
-    return ctx.db.transaction.update({
+    const { id, ...rest } = input
+    const transaction = await ctx.db.transaction.update({
       where: { id },
       data: rest,
-    });
-  });
+    })
+    if (transaction.date) {
+      await updateTotalWallet(ctx.db, transaction.walletId, transaction.date)
+    }
+    return transaction
+  })

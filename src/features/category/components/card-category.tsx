@@ -11,7 +11,7 @@ export default function CardCategory() {
   return (
     <div className="relative max-w-xl space-y-2.5 rounded-lg border bg-white pb-4">
       <div className="flex items-center justify-between px-4 pt-2">
-        <p>Transaction</p>
+        <p>Category</p>
         <ModalAddCategory />
       </div>
       {isPending ? (
