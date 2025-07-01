@@ -14,8 +14,13 @@ import {
 import { transactionSchema, type TransactionFormSchema } from '../schema'
 import { TransactionForm } from './form-transaction'
 import { api } from '~/trpc/react'
+import { cn } from '~/lib/utils'
 
-export default function ModalAddTransaction() {
+export default function ModalAddTransaction({
+  className,
+}: {
+  className?: string
+}) {
   const [open, setOpen] = useState(false)
   const utils = api.useUtils()
 
@@ -40,7 +45,12 @@ export default function ModalAddTransaction() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="absolute -right-4 -bottom-4 h-10 w-10 rounded-full bg-[#31B9B5] p-0">
+        <Button
+          className={cn(
+            'absolute -right-4 -bottom-4 h-10 w-10 rounded-full bg-[#31B9B5] p-0',
+            className,
+          )}
+        >
           <Plus />
         </Button>
       </DialogTrigger>

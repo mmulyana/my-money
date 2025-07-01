@@ -1,39 +1,39 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Ellipsis, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { Ellipsis, Plus } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
-import { Button } from "~/components/ui/button";
+import { Button } from '~/components/ui/button'
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogTrigger,
-} from "~/components/ui/dialog";
+} from '~/components/ui/dialog'
 
-import { transactionSchema, type TransactionFormSchema } from "../schema";
-import { TransactionForm } from "./form-transaction";
-import { api } from "~/trpc/react";
+import { transactionSchema, type TransactionFormSchema } from '../schema'
+import { TransactionForm } from './form-transaction'
+import { api } from '~/trpc/react'
 
 export default function ModalEditTransaction({
   data,
 }: {
-  data: TransactionFormSchema & { id: string };
+  data: TransactionFormSchema & { id: string }
 }) {
-  const [open, setOpen] = useState(false);
-  const utils = api.useUtils();
+  const [open, setOpen] = useState(false)
+  const utils = api.useUtils()
 
   const { data: res } = api.transaction.read.useQuery({
-    id: open ? data.id : "",
-  });
+    id: open ? data.id : '',
+  })
 
   const form = useForm<TransactionFormSchema>({
     resolver: zodResolver(transactionSchema),
     defaultValues: {
       amount: 0,
-      type: "EXPENSE",
+      type: 'EXPENSE',
     },
-  });
+  })
 
   useEffect(() => {
     if (res && open) {
@@ -41,21 +41,22 @@ export default function ModalEditTransaction({
         amount: res.amount,
         categoryId: res.categoryId,
         date: res.date ? new Date(res.date) : undefined,
-        note: res?.note || "",
+        note: res?.note || '',
         type: res.type,
-      });
+        walletId: res.walletId,
+      })
     }
-  }, [res]);
+  }, [res])
 
   const create = api.transaction.update.useMutation({
     onSuccess: () => {
-      utils.transaction.invalidate();
-      form.reset();
-      setOpen(false);
+      utils.transaction.invalidate()
+      form.reset()
+      setOpen(false)
     },
-  });
+  })
 
-  const category = api.category.readAll.useQuery();
+  const category = api.category.readAll.useQuery()
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -79,5 +80,5 @@ export default function ModalEditTransaction({
         </div>
       </DialogContent>
     </Dialog>
-  );
+  )
 }
