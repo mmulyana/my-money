@@ -1,5 +1,6 @@
 import type { Category } from '@prisma/client'
 import { type ElementType, type ComponentPropsWithoutRef } from 'react'
+import { IconRenderer } from '~/components/common/icon-renderer'
 import { cn } from '~/lib/utils'
 
 type CategoryItemProps<T extends ElementType = 'div'> = {
@@ -17,16 +18,30 @@ export default function CategoryItem<T extends ElementType = 'div'>({
 
   return (
     <Component
-      className={cn('flex items-center gap-2', className)}
+      className={cn('flex items-center justify-between gap-2 w-full', className)}
       {...defaultProps}
     >
-      <div
-        className="h-1.5 w-1.5 rounded-full"
-        style={{
-          background: data.color,
-        }}
-      />
-      <p className="text-gray-900">{data.name}</p>
+      <div className='flex gap-2 items-center'>
+        <div className="relative h-10 w-10 overflow-hidden rounded-full">
+          <div
+            className="h-full w-full opacity-5"
+            style={{
+              background: data.color,
+            }}
+          ></div>
+          <IconRenderer
+            icon={data.icon as any}
+            className="absolute top-1/2 left-1/2 h-8 -translate-x-1/2 -translate-y-1/2"
+            style={{
+              color: data.color,
+            }}
+          />
+        </div>
+        <p className="text-gray-900">{data.name || '-'}</p>
+      </div>
+      <div>
+        <p className='text-sm text-gray-600 capitalize'>{data.type?.toLowerCase()}</p>
+      </div>
     </Component>
   )
 }

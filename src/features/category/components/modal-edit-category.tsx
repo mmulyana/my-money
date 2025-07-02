@@ -49,13 +49,13 @@ export default function ModalEditCategory({
         <CategoryItem
           as="button"
           type="button"
-          className="hover:cursor-pointer hover:underline"
+          className="px-2 py-1.5 hover:cursor-pointer border-transparent border hover:border-gray-200 rounded-lg"
           data={data}
         />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>New Category</DialogTitle>
+          <DialogTitle className="hidden"></DialogTitle>
           <DialogDescription className="hidden"></DialogDescription>
         </DialogHeader>
         <FormCategory

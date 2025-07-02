@@ -17,6 +17,7 @@ import {
 
 import FormCategory from './form-category'
 import { CategorySchema } from '../schema'
+import { Plus } from 'lucide-react'
 
 export default function ModalAddCategory() {
   const [open, setOpen] = useState(false)
@@ -25,8 +26,9 @@ export default function ModalAddCategory() {
   const form = useForm({
     resolver: zodResolver(CategorySchema),
     defaultValues: {
-      color: '',
+      color: '#7C3AED',
       name: '',
+      icon: 'Salad',
     },
   })
 
@@ -40,11 +42,14 @@ export default function ModalAddCategory() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>New</Button>
+        <Button className="h-8 py-0" variant="secondary">
+          <Plus />
+          New
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>New Category</DialogTitle>
+          <DialogTitle className="hidden"></DialogTitle>
           <DialogDescription className="hidden"></DialogDescription>
         </DialogHeader>
         <FormCategory

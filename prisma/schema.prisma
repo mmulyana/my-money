@@ -99,10 +99,12 @@ model Transaction {
 }
 
 model Category {
-  id        String  @id @default(ulid())
+  id        String           @id @default(ulid())
   name      String
   color     String
   createdBy String?
+  type      TransactionType?
+  icon      String?
 
   user User? @relation(fields: [createdBy], references: [id])
 
