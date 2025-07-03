@@ -1,6 +1,14 @@
 'use client'
 
+import { TrendingDown, TrendingUp } from 'lucide-react'
 import type { UseFormReturn } from 'react-hook-form'
+
+import ColorPicker from '~/components/common/color-picker'
+import RadioCard from '~/components/common/radio-card'
+import { IconPicker } from '~/components/common/icon-picker'
+import { Button } from '~/components/ui/button'
+import { Input } from '~/components/ui/input'
+import { Label } from '~/components/ui/label'
 import {
   Form,
   FormControl,
@@ -9,14 +17,8 @@ import {
   FormLabel,
   FormMessage,
 } from '~/components/ui/form'
-import { Input } from '~/components/ui/input'
-import { Button } from '~/components/ui/button'
+
 import type { Category } from '../schema'
-import { IconPicker } from '~/components/common/icon-picker'
-import { Label } from '~/components/ui/label'
-import ColorPicker from '~/components/common/color-picker'
-import RadioCard from '~/components/common/radio-card'
-import { TrendingDown, TrendingUp } from 'lucide-react'
 
 type props = {
   form: UseFormReturn<Category>

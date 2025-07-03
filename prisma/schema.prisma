@@ -30,6 +30,7 @@ model User {
   transactions Transaction[]
   categories   Category[]
   wallets      Wallet[]
+  budgets      Budget[]
 
   @@unique([email])
   @@map("user")
@@ -109,6 +110,7 @@ model Category {
   user User? @relation(fields: [createdBy], references: [id])
 
   transactions Transaction[]
+  budgets      Budget[]
 }
 
 enum TransactionType {
@@ -134,4 +136,16 @@ model TotalWallet {
   total    Int
 
   wallet Wallet @relation(fields: [walletId], references: [id])
+}
+
+model Budget {
+  id         String   @id @default(ulid())
+  categoryId String
+  startDate  DateTime
+  endDate    DateTime
+  createdBy  String
+  amount     Int
+
+  user     User     @relation(fields: [createdBy], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
 }

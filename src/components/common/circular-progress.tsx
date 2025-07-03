@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { cn } from '~/lib/utils'
 
 type props = {
@@ -20,7 +21,6 @@ export default function CircularProgress({
   const radius = 40
   const normalizedRadius = radius - strokeWidth / 2
   const circumference = normalizedRadius * 2 * Math.PI
-  const strokeDashoffset = circumference - (progress / 100) * circumference
 
   return (
     <div
@@ -42,11 +42,14 @@ export default function CircularProgress({
           strokeWidth={strokeWidth}
           strokeLinecap="round"
           strokeDasharray={`${circumference} ${circumference}`}
-          strokeDashoffset={strokeDashoffset}
           r={normalizedRadius}
           cx="50"
           cy="50"
           transform="rotate(-90 50 50)"
+          strokeDashoffset={circumference - (progress / 100) * circumference}
+          style={{
+            transition: 'stroke-dashoffset 0.5s ease-out',
+          }}
         />
       </svg>
 

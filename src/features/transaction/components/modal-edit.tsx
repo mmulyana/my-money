@@ -51,6 +51,8 @@ export default function ModalEditTransaction({
   const create = api.transaction.update.useMutation({
     onSuccess: () => {
       utils.transaction.invalidate()
+      utils.budget.invalidate()
+      utils.wallet.invalidate()
       form.reset()
       setOpen(false)
     },

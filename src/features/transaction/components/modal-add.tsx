@@ -36,6 +36,7 @@ export default function ModalAddTransaction({
     onSuccess: () => {
       utils.transaction.invalidate()
       utils.wallet.invalidate()
+      utils.budget.invalidate()
       form.reset()
       setOpen(false)
     },
