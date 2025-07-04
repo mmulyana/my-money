@@ -2,10 +2,10 @@
 
 import CircularProgress from '@/components/common/circular-progress'
 import { IconRenderer } from '@/components/common/icon-renderer'
+import { Skeleton } from '@/components/ui/skeleton'
 import { api } from '@/trpc/react'
 
 import ModalAddBudget from './modal-add-budget'
-import { Skeleton } from '@/components/ui/skeleton'
 
 export default function WidgetBudget() {
   const { data, isPending } = api.budget.readAll.useQuery()
