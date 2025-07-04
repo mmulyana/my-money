@@ -1,6 +1,6 @@
 'use client'
+import { authClient } from '@/shared/utils/auth-client'
 import { Bell, MessageSquareText, Triangle, Wallet } from 'lucide-react'
-import { authClient } from '@/lib/utils/auth-client'
 
 export default function Navbar() {
   const { data } = authClient.useSession()
@@ -11,7 +11,7 @@ export default function Navbar() {
         <MessageSquareText className="fill-gray-100" size={20} />
         <Bell className="fill-gray-800 stroke-gray-800" size={20} />
         <div className="flex items-center gap-3">
-          <div className="h-8 w-8 rounded-full bg-gray-300 uppercase flex justify-center items-center">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-300 uppercase">
             {data?.user.name.at(1)}
           </div>
           <p className="hidden md:block">{data?.user.name}</p>

@@ -1,6 +1,6 @@
 import { Check } from 'lucide-react'
-import { cn } from '@/lib/utils'
 import { Label } from '../ui/label'
+import { cn } from '@/shared/utils'
 
 interface ColorPickerProps {
   value: string
@@ -32,9 +32,7 @@ export default function ColorPicker({
 }: ColorPickerProps) {
   return (
     <div>
-      <Label className="mb-2">
-        Color
-      </Label>
+      <Label className="mb-2">Color</Label>
       <div className="flex flex-wrap gap-2">
         {colors.map((color) => {
           const selected = value === color

@@ -1,9 +1,11 @@
 'use client'
 
 import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
 
-import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/shared/utils'
+import { api } from '@/trpc/react'
 import {
   Command,
   CommandEmpty,
@@ -17,33 +19,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { useEffect, useMemo, useState } from 'react'
-import { api } from '@/trpc/react'
-import CategoryItem from './category-item'
-import { IconRenderer } from '@/components/common/icon-renderer'
 
-const frameworks = [
-  {
-    value: 'next.js',
-    label: 'Next.js',
-  },
-  {
-    value: 'sveltekit',
-    label: 'SvelteKit',
-  },
-  {
-    value: 'nuxt.js',
-    label: 'Nuxt.js',
-  },
-  {
-    value: 'remix',
-    label: 'Remix',
-  },
-  {
-    value: 'astro',
-    label: 'Astro',
-  },
-]
+import CategoryItem from './category-item'
 
 export function ComboboxCategory({
   defaultValue,

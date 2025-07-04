@@ -7,7 +7,7 @@ import WalletSelect from '@/features/wallet/components/wallet-select'
 import MonthSelect from '@/components/common/month-select'
 import { Skeleton } from '@/components/ui/skeleton'
 import { api } from '@/trpc/react'
-import { cn, formatThousands } from '@/lib/utils'
+import { cn, formatThousands } from '@/shared/utils'
 
 export default function WidgetTransaction() {
   const { data, isPending } = api.transaction.readAll.useQuery()

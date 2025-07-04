@@ -14,7 +14,7 @@ import {
 import { transactionSchema, type TransactionFormSchema } from '../schema'
 import { TransactionForm } from './form-transaction'
 import { api } from '@/trpc/react'
-import { cn } from '@/lib/utils'
+import { cn } from '@/shared/utils'
 
 export default function ModalAddTransaction({
   className,

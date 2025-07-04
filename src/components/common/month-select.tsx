@@ -4,10 +4,10 @@ import { useAtom } from 'jotai'
 
 import { currentMonthAtom } from '@/shared/stores/atom-date'
 import { getMonths } from '@/shared/helper/month'
-import { cn } from '@/lib/utils'
 
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Button } from '../ui/button'
+import { cn } from '@/shared/utils'
 
 export default function MonthSelect() {
   const [month, setMonth] = useAtom(currentMonthAtom)

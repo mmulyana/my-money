@@ -1,7 +1,6 @@
 import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { api } from '@/trpc/react'
-import { cn } from '@/lib/utils'
 
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
@@ -18,6 +17,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { cn } from '@/shared/utils'
 
 export default function WalletSelect({
   value,

@@ -1,9 +1,10 @@
 'use client'
 
-import React from 'react'
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { cn } from '@/lib/utils'
+import Link from 'next/link'
+import React from 'react'
+
+import { cn } from '@/shared/utils'
 
 interface LinkItem {
   name: string
@@ -19,7 +20,7 @@ export default function Sidebar(props: SidebarProps) {
   const pathname = usePathname()
 
   return (
-    <div className="w-fit pl-8 absolute hidden md:block">
+    <div className="absolute hidden w-fit pl-8 md:block">
       <ul className="space-y-4">
         {props.links.map((link) => {
           const isActive = pathname === link.path

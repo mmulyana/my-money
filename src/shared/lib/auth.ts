@@ -4,7 +4,7 @@ import { nextCookies } from 'better-auth/next-js'
 import { headers } from 'next/headers'
 import { cache } from 'react'
 
-import { db } from '@/server/db'
+import { db } from '@/shared/lib/db'
 
 export const auth = betterAuth({
   database: prismaAdapter(db, {

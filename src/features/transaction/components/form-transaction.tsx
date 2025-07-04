@@ -27,7 +27,6 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
-import { cn } from '@/lib/utils'
 import {
   Select,
   SelectContent,
@@ -37,6 +36,7 @@ import {
 } from '@/components/ui/select'
 import { Calendar } from '@/components/ui/calendar'
 import { format } from 'date-fns'
+import { cn } from '@/shared/utils'
 
 type Props = {
   form: UseFormReturn<TransactionFormSchema>

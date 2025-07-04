@@ -1,6 +1,6 @@
 import CategoryItem from '@/features/category/components/category-item'
 import type { Category, Transaction } from '@prisma/client'
-import { cn, formatThousands } from '@/lib/utils'
+import { cn, formatThousands } from '@/shared/utils'
 
 import ModalEditTransaction from './modal-edit'
 

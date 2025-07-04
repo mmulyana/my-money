@@ -10,8 +10,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import { cn } from '@/lib/utils'
 import { useState } from 'react'
+import { cn } from '@/shared/utils'
 
 type props = {
   defaultValue?: Date
