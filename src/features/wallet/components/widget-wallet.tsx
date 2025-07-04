@@ -2,8 +2,8 @@
 
 import { useAtomValue } from 'jotai'
 import { Wallet } from 'lucide-react'
-import { currentMonthAtom, currentYearAtom } from '~/shared/stores/atom-date'
-import { api } from '~/trpc/react'
+import { currentMonthAtom, currentYearAtom } from '@/shared/stores/atom-date'
+import { api } from '@/trpc/react'
 
 export default function WidgetWallet() {
   const month = useAtomValue(currentMonthAtom)

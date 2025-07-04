@@ -1,16 +1,17 @@
 'use client'
 
-import * as React from 'react'
-import { format } from 'date-fns'
 import { Calendar as CalendarIcon } from 'lucide-react'
+import { format } from 'date-fns'
+
+import { Calendar } from '@/components/ui/calendar'
+import { Button } from '@/components/ui/button'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '~/components/ui/popover'
-import { Button } from '~/components/ui/button'
-import { Calendar } from '~/components/ui/calendar'
-import { cn } from '~/lib/utils'
+} from '@/components/ui/popover'
+import { cn } from '@/lib/utils'
+import { useState } from 'react'
 
 type props = {
   defaultValue?: Date
@@ -23,7 +24,7 @@ export function DatePicker({
   onValueChange,
   placeholder = 'Select date',
 }: props) {
-  const [date, setDate] = React.useState<Date | undefined>(defaultValue)
+  const [date, setDate] = useState<Date | undefined>(defaultValue)
 
   const handleChange = (selectedDate: Date | undefined) => {
     setDate(selectedDate)

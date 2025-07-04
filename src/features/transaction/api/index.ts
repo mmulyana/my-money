@@ -1,7 +1,7 @@
-import { protectedProcedure } from '~/trpc/helper'
-import { transactionSchema } from '../schema'
 import { z } from 'zod'
-import { updateTotalWallet } from '~/features/wallet/helper'
+import { updateTotalWallet } from '@/features/wallet/helper'
+import { protectedProcedure } from '@/trpc/helper'
+import { transactionSchema } from '../schema'
 
 export const create = protectedProcedure
   .input(transactionSchema)

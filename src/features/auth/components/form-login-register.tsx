@@ -9,7 +9,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "~/components/ui/card";
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -17,13 +17,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
-import { authClient } from "~/lib/utils/auth-client";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/utils/auth-client";
 import type { ErrorContext } from "better-auth/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import ButtonSubmit from "~/components/common/button-submit";
+import ButtonSubmit from "@/components/common/button-submit";
 import {
   loginSchema,
   registerSchema,

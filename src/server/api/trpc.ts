@@ -9,9 +9,9 @@
 import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
-import { auth } from "~/lib/auth";
+import { auth } from "@/lib/auth";
 
-import { db } from "~/server/db";
+import { db } from "@/server/db";
 
 /**
  * 1. CONTEXT

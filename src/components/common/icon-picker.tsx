@@ -1,9 +1,9 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { useIconPicker } from '@/shared/hooks/use-icon-picker'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
-import { Button } from '../ui/button'
-import { useIconPicker } from '~/shared/hooks/use-icon-picker'
 import { IconRenderer } from './icon-renderer'
+import { Button } from '../ui/button'
 
 export const IconPicker = ({
   defaultValue,

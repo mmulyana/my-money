@@ -2,8 +2,8 @@
 
 import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react'
 
-import { cn } from '~/lib/utils'
-import { Button } from '~/components/ui/button'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import {
   Command,
   CommandEmpty,
@@ -11,16 +11,16 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '~/components/ui/command'
+} from '@/components/ui/command'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '~/components/ui/popover'
+} from '@/components/ui/popover'
 import { useEffect, useMemo, useState } from 'react'
-import { api } from '~/trpc/react'
+import { api } from '@/trpc/react'
 import CategoryItem from './category-item'
-import { IconRenderer } from '~/components/common/icon-renderer'
+import { IconRenderer } from '@/components/common/icon-renderer'
 
 const frameworks = [
   {

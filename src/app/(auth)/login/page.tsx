@@ -1,4 +1,4 @@
-import FormLoginRegister from "~/features/auth/components/form-login-register";
+import FormLoginRegister from "@/features/auth/components/form-login-register";
 
 export default function Page() {
   return <FormLoginRegister variant="login" />;

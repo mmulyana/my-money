@@ -1,5 +1,5 @@
 import { type SVGProps } from 'react'
-import { LucideIconList } from '~/shared/constants/icon'
+import { LucideIconList } from '@/shared/constants/icon'
 import { Plus } from 'lucide-react'
 
 interface IconRendererProps extends SVGProps<SVGSVGElement> {

@@ -1,6 +1,6 @@
 import { type UseFormReturn } from 'react-hook-form'
 import type { TransactionFormSchema } from '../schema'
-import { Button } from '~/components/ui/button'
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -8,16 +8,16 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '~/components/ui/form'
+} from '@/components/ui/form'
 import { ModalDestroyTransaction } from './modal-destroy'
-import { api } from '~/trpc/react'
-import { Input } from '~/components/ui/input'
-import { Textarea } from '~/components/ui/textarea'
+import { api } from '@/trpc/react'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '~/components/ui/popover'
+} from '@/components/ui/popover'
 import { CalendarIcon, CheckIcon, ChevronsUpDownIcon } from 'lucide-react'
 import {
   Command,
@@ -26,16 +26,16 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '~/components/ui/command'
-import { cn } from '~/lib/utils'
+} from '@/components/ui/command'
+import { cn } from '@/lib/utils'
 import {
   Select,
   SelectContent,
   SelectTrigger,
   SelectItem,
   SelectValue,
-} from '~/components/ui/select'
-import { Calendar } from '~/components/ui/calendar'
+} from '@/components/ui/select'
+import { Calendar } from '@/components/ui/calendar'
 import { format } from 'date-fns'
 
 type Props = {

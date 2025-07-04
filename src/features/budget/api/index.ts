@@ -1,4 +1,4 @@
-import { protectedProcedure } from '~/trpc/helper'
+import { protectedProcedure } from '@/trpc/helper'
 import { BudgetSchema } from '../schema'
 
 export const readAll = protectedProcedure.query(async ({ ctx }) => {

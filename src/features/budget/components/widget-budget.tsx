@@ -1,10 +1,10 @@
 'use client'
 
 import { BatteryCharging, Bed, Car, Hamburger } from 'lucide-react'
-import CircularProgress from '~/components/common/circular-progress'
+import CircularProgress from '@/components/common/circular-progress'
 import ModalAddBudget from './modal-add-budget'
-import { api } from '~/trpc/react'
-import { IconRenderer } from '~/components/common/icon-renderer'
+import { api } from '@/trpc/react'
+import { IconRenderer } from '@/components/common/icon-renderer'
 
 export default function WidgetBudget() {
   const { data } = api.budget.readAll.useQuery()

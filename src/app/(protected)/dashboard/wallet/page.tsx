@@ -1,7 +1,7 @@
 'use client'
 
-import ModalWallet from '~/features/wallet/components/modal-wallet'
-import WidgetWallet from '~/features/wallet/components/widget-wallet'
+import ModalWallet from '@/features/wallet/components/modal-wallet'
+import WidgetWallet from '@/features/wallet/components/widget-wallet'
 
 export default function Page() {
   return (

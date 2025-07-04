@@ -1,10 +1,10 @@
 import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { api } from '~/trpc/react'
-import { cn } from '~/lib/utils'
+import { api } from '@/trpc/react'
+import { cn } from '@/lib/utils'
 
-import { Skeleton } from '~/components/ui/skeleton'
-import { Button } from '~/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Button } from '@/components/ui/button'
 import {
   Command,
   CommandEmpty,
@@ -12,12 +12,12 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '~/components/ui/command'
+} from '@/components/ui/command'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '~/components/ui/popover'
+} from '@/components/ui/popover'
 
 export default function WalletSelect({
   value,

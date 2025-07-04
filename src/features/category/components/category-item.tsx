@@ -1,7 +1,7 @@
 import type { Category } from '@prisma/client'
 import { type ElementType, type ComponentPropsWithoutRef } from 'react'
-import { IconRenderer } from '~/components/common/icon-renderer'
-import { cn } from '~/lib/utils'
+import { IconRenderer } from '@/components/common/icon-renderer'
+import { cn } from '@/lib/utils'
 
 type CategoryItemProps<T extends ElementType = 'div'> = {
   as?: T

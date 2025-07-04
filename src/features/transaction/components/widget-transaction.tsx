@@ -1,16 +1,15 @@
 import { format } from 'date-fns'
-
-import TransactionItem from '~/features/transaction/components/transaction-item'
-import ModalAddTransaction from '~/features/transaction/components/modal-add'
-import { Skeleton } from '~/components/ui/skeleton'
-import { api } from '~/trpc/react'
-import WalletSelect from '~/features/wallet/components/wallet-select'
-import { cn } from '~/lib/utils'
 import { useMemo } from 'react'
-import { getMonths } from '~/shared/helper/month'
-import MonthSelect from '~/components/common/month-select'
 
-export default function CardTransaction() {
+import TransactionItem from '@/features/transaction/components/transaction-item'
+import ModalAddTransaction from '@/features/transaction/components/modal-add'
+import WalletSelect from '@/features/wallet/components/wallet-select'
+import MonthSelect from '@/components/common/month-select'
+import { Skeleton } from '@/components/ui/skeleton'
+import { api } from '@/trpc/react'
+import { cn } from '@/lib/utils'
+
+export default function WidgetTransaction() {
   const { data, isPending } = api.transaction.readAll.useQuery()
 
   const grouped = data

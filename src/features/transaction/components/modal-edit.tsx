@@ -3,17 +3,17 @@ import { useForm } from 'react-hook-form'
 import { Ellipsis, Plus } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
-import { Button } from '~/components/ui/button'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogTrigger,
-} from '~/components/ui/dialog'
+} from '@/components/ui/dialog'
 
 import { transactionSchema, type TransactionFormSchema } from '../schema'
 import { TransactionForm } from './form-transaction'
-import { api } from '~/trpc/react'
+import { api } from '@/trpc/react'
 
 export default function ModalEditTransaction({
   data,

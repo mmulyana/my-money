@@ -1,4 +1,4 @@
-export function getMonths(locale: string) {
+export function getMonths(locale?: string) {
   const language: string = locale || 'en'
   return Array.from({ length: 12 }, (_, i) => {
     const date = new Date(2000, i, 1)

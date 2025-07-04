@@ -1,6 +1,6 @@
 'use client'
 import { Bell, MessageSquareText, Triangle, Wallet } from 'lucide-react'
-import { authClient } from '~/lib/utils/auth-client'
+import { authClient } from '@/lib/utils/auth-client'
 
 export default function Navbar() {
   const { data } = authClient.useSession()

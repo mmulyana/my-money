@@ -1,8 +1,9 @@
 'use client'
 
-import { api } from '~/trpc/react'
+import { Skeleton } from '@/components/ui/skeleton'
+import { api } from '@/trpc/react'
+
 import ModalAddCategory from './modal-add-category'
-import { Skeleton } from '~/components/ui/skeleton'
 import ModalEditCategory from './modal-edit-category'
 
 export default function CardCategory() {

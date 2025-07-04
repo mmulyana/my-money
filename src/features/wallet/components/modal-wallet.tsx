@@ -2,7 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import type { Wallet } from '@prisma/client'
 import { useForm } from 'react-hook-form'
 import { WalletSchema } from '../schema'
-import { api } from '~/trpc/react'
+import { api } from '@/trpc/react'
 import { useEffect, useState } from 'react'
 import {
   Dialog,
@@ -11,8 +11,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '~/components/ui/dialog'
-import { Button } from '~/components/ui/button'
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
 import FormWallet from './form-wallet'
 import { ModalDestroyWallet } from './modal-destroy-wallet'
 

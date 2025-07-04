@@ -1,5 +1,5 @@
-import { postRouter } from '~/server/api/routers/post'
-import { createCallerFactory, createTRPCRouter } from '~/server/api/trpc'
+import { postRouter } from '@/server/api/routers/post'
+import { createCallerFactory, createTRPCRouter } from '@/server/api/trpc'
 import { transactionRouter } from './routers/transaction'
 import { categoryRouter } from './routers/category'
 import { walletRouter } from './routers/wallet'

@@ -4,7 +4,7 @@ import {
   readAll,
   update,
   read,
-} from "~/features/transaction/api";
+} from "@/features/transaction/api";
 import { createTRPCRouter } from "../trpc";
 
 export const transactionRouter = createTRPCRouter({

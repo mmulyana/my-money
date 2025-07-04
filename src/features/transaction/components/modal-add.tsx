@@ -3,18 +3,18 @@ import { useForm } from 'react-hook-form'
 import { Plus } from 'lucide-react'
 import { useState } from 'react'
 
-import { Button } from '~/components/ui/button'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogTrigger,
-} from '~/components/ui/dialog'
+} from '@/components/ui/dialog'
 
 import { transactionSchema, type TransactionFormSchema } from '../schema'
 import { TransactionForm } from './form-transaction'
-import { api } from '~/trpc/react'
-import { cn } from '~/lib/utils'
+import { api } from '@/trpc/react'
+import { cn } from '@/lib/utils'
 
 export default function ModalAddTransaction({
   className,

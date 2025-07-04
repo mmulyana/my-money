@@ -1,7 +1,7 @@
 import type { Category, Transaction } from '@prisma/client'
 import ModalEditTransaction from './modal-edit'
-import { cn } from '~/lib/utils'
-import { IconRenderer } from '~/components/common/icon-renderer'
+import { cn } from '@/lib/utils'
+import { IconRenderer } from '@/components/common/icon-renderer'
 
 export default function TransactionItem({
   data,

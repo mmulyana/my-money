@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation'
-import Navbar from '~/components/common/navbar'
-import Sidebar from '~/components/common/sidebar'
-import { getServerSession } from '~/lib/auth'
-import { menus } from '~/lib/constants/sidebar'
+import Sidebar from '@/components/common/sidebar'
+import Navbar from '@/components/common/navbar'
+import { menus } from '@/lib/constants/sidebar'
+import { getServerSession } from '@/lib/auth'
 
 export default async function Layout({ children }: React.PropsWithChildren) {
   const session = await getServerSession()

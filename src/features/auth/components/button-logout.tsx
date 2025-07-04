@@ -2,8 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { authClient } from "~/lib/utils/auth-client";
-import { Button } from "~/components/ui/button";
+import { authClient } from "@/lib/utils/auth-client";
+import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
 
 export default function ButtonLogout() {

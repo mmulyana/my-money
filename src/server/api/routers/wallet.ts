@@ -4,7 +4,7 @@ import {
   readAll,
   readAllWithTotal,
   update,
-} from '~/features/wallet/api'
+} from '@/features/wallet/api'
 import { createTRPCRouter } from '../trpc'
 
 export const walletRouter = createTRPCRouter({

@@ -9,9 +9,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '~/components/ui/alert-dialog'
-import { Button } from '~/components/ui/button'
-import { api } from '~/trpc/react'
+} from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
+import { api } from '@/trpc/react'
 
 export function ModalDestroyTransaction({
   callback,

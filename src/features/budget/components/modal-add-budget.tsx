@@ -2,10 +2,10 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { api } from '~/trpc/react'
+import { api } from '@/trpc/react'
 import { useState } from 'react'
 
-import { Button } from '~/components/ui/button'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -13,7 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '~/components/ui/dialog'
+} from '@/components/ui/dialog'
 
 import { Plus } from 'lucide-react'
 import { BudgetSchema } from '../schema'

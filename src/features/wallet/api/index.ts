@@ -1,4 +1,4 @@
-import { protectedProcedure } from '~/trpc/helper'
+import { protectedProcedure } from '@/trpc/helper'
 import { WalletSchema } from '../schema'
 import { z } from 'zod'
 

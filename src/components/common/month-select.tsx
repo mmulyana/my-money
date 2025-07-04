@@ -1,16 +1,18 @@
-import { useAtom } from 'jotai'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
-import { currentMonthAtom } from '~/shared/stores/atom-date'
-import { getMonths } from '~/shared/helper/month'
-import { Button } from '../ui/button'
 import { CalendarDays, ChevronsUpDown } from 'lucide-react'
-import { cn } from '~/lib/utils'
 import { useState } from 'react'
+import { useAtom } from 'jotai'
+
+import { currentMonthAtom } from '@/shared/stores/atom-date'
+import { getMonths } from '@/shared/helper/month'
+import { cn } from '@/lib/utils'
+
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
+import { Button } from '../ui/button'
 
 export default function MonthSelect() {
   const [month, setMonth] = useAtom(currentMonthAtom)
-  const months = getMonths()
   const [open, setOpen] = useState(false)
+  const months = getMonths()
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

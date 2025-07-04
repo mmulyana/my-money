@@ -7,11 +7,11 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '~/components/ui/form'
-import { ComboboxCategory } from '~/features/category/components/combobox-category'
-import { Button } from '~/components/ui/button'
-import { Input } from '~/components/ui/input'
-import { DatePicker } from '~/components/common/date-picker'
+} from '@/components/ui/form'
+import { ComboboxCategory } from '@/features/category/components/combobox-category'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { DatePicker } from '@/components/common/date-picker'
 
 type props = {
   form: UseFormReturn<Budget>

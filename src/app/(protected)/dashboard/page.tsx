@@ -1,8 +1,8 @@
 'use client'
 
-import CardTransaction from '~/features/transaction/components/card-transaction'
-import WidgetBudget from '~/features/budget/components/widget-budget'
-import WidgetWallet from '~/features/wallet/components/widget-wallet'
+import CardTransaction from '@/features/transaction/components/widget-transaction'
+import WidgetBudget from '@/features/budget/components/widget-budget'
+import WidgetWallet from '@/features/wallet/components/widget-wallet'
 
 export default function Page() {
   return (
