@@ -15,6 +15,7 @@ import {
 import { Button } from '@/components/ui/button'
 import FormWallet from './form-wallet'
 import { ModalDestroyWallet } from './modal-destroy-wallet'
+import { Plus } from 'lucide-react'
 
 type props = {
   variant: 'add' | 'edit'
@@ -57,7 +58,14 @@ export default function ModalWallet({ data, variant }: props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        {variant === 'edit' ? <p>{data?.name}</p> : <Button>New</Button>}
+        {variant === 'edit' ? (
+          <p>{data?.name}</p>
+        ) : (
+          <Button variant="secondary" size='sm' >
+            <Plus size={18} strokeWidth={3}/>
+            New
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

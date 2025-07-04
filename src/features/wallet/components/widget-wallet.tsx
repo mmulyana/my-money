@@ -1,12 +1,18 @@
 'use client'
 
-import { useAtomValue } from 'jotai'
 import { Wallet } from 'lucide-react'
-import { currentMonthAtom, currentYearAtom } from '@/shared/stores/atom-date'
+import { useAtomValue } from 'jotai'
 import { api } from '@/trpc/react'
-import { Skeleton } from '@/components/ui/skeleton'
 
-export default function WidgetWallet() {
+import { currentMonthAtom, currentYearAtom } from '@/shared/stores/atom-date'
+import { Skeleton } from '@/components/ui/skeleton'
+import ModalWallet from './modal-wallet'
+
+export default function WidgetWallet({
+  showCreate = false,
+}: {
+  showCreate?: boolean
+}) {
   const month = useAtomValue(currentMonthAtom)
   const year = useAtomValue(currentYearAtom)
 
@@ -22,7 +28,11 @@ export default function WidgetWallet() {
 
   return (
     <div className="rounded-xl border bg-white px-6 pt-5 pb-6">
-      <p className="text-gray-800">My Wallets</p>
+      <div className="flex items-center justify-between">
+        <p className="text-gray-800">My Wallets</p>
+        {showCreate && <ModalWallet variant="add" />}
+      </div>
+
       <div className="mt-4 space-y-2">
         {isPending ? (
           <>
