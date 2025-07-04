@@ -1,7 +1,8 @@
+import CategoryItem from '@/features/category/components/category-item'
 import type { Category, Transaction } from '@prisma/client'
+import { cn, formatThousands } from '@/lib/utils'
+
 import ModalEditTransaction from './modal-edit'
-import { cn } from '@/lib/utils'
-import { IconRenderer } from '@/components/common/icon-renderer'
 
 export default function TransactionItem({
   data,
@@ -11,22 +12,16 @@ export default function TransactionItem({
   return (
     <div className="flex items-center justify-between">
       <div>
-        <div className="flex items-center gap-2">
-          <div
-            className="flex h-7 w-7 items-center justify-center rounded-full"
-            style={{
-              background: data?.category?.color,
-            }}
-          >
-            <IconRenderer icon="AArrowDown" />
-          </div>
-          <p className="text-gray-900">{data.category.name}</p>
-        </div>
-        <p className="pl-3.5 text-sm text-gray-500">{data?.note}</p>
+        <CategoryItem
+          variant="color"
+          data={data.category}
+          note={data?.note || ''}
+          hideType
+        />
       </div>
       <div className="flex items-center gap-2">
         <p className={cn(data.type === 'EXPENSE' && 'text-red-500')}>
-          {data.amount}
+          {formatThousands(data.amount)}
         </p>
         <ModalEditTransaction
           data={{

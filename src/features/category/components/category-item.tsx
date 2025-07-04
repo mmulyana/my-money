@@ -6,11 +6,17 @@ import { cn } from '@/lib/utils'
 type CategoryItemProps<T extends ElementType = 'div'> = {
   as?: T
   data: Partial<Category>
+  hideType?: boolean
+  note?: string
+  variant?: 'default' | 'color'
 } & ComponentPropsWithoutRef<T>
 
 export default function CategoryItem<T extends ElementType = 'div'>({
   as,
   data,
+  hideType = false,
+  note,
+  variant = 'default',
   ...props
 }: CategoryItemProps<T>) {
   const { className, ...defaultProps } = props
@@ -18,11 +24,20 @@ export default function CategoryItem<T extends ElementType = 'div'>({
 
   return (
     <Component
-      className={cn('flex items-center justify-between gap-2 w-full', className)}
+      className={cn(
+        'flex w-full items-center justify-between gap-2',
+        className,
+      )}
       {...defaultProps}
     >
-      <div className='flex gap-2 items-center'>
-        <div className="relative h-10 w-10 overflow-hidden rounded-full">
+      <div className="flex items-center gap-2">
+        <div
+          className={cn(
+            'relative h-10 w-10 overflow-hidden rounded-full',
+            variant === 'color' && 'border',
+          )}
+          style={{ borderColor: variant === 'color' ? data.color : '' }}
+        >
           <div
             className="h-full w-full opacity-5"
             style={{
@@ -37,11 +52,18 @@ export default function CategoryItem<T extends ElementType = 'div'>({
             }}
           />
         </div>
-        <p className="text-gray-900">{data.name || '-'}</p>
+        <div>
+          <p className="text-gray-900">{data.name || '-'}</p>
+          <p className="text-sm text-gray-400">{note}</p>
+        </div>
       </div>
-      <div>
-        <p className='text-sm text-gray-600 capitalize'>{data.type?.toLowerCase()}</p>
-      </div>
+      {!hideType && (
+        <div>
+          <p className="text-sm text-gray-600 capitalize">
+            {data.type?.toLowerCase()}
+          </p>
+        </div>
+      )}
     </Component>
   )
 }

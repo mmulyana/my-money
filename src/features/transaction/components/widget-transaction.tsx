@@ -7,7 +7,7 @@ import WalletSelect from '@/features/wallet/components/wallet-select'
 import MonthSelect from '@/components/common/month-select'
 import { Skeleton } from '@/components/ui/skeleton'
 import { api } from '@/trpc/react'
-import { cn } from '@/lib/utils'
+import { cn, formatThousands } from '@/lib/utils'
 
 export default function WidgetTransaction() {
   const { data, isPending } = api.transaction.readAll.useQuery()
@@ -100,7 +100,14 @@ export default function WidgetTransaction() {
               <p className="text-sm text-gray-500">
                 {format(new Date(group.date), 'MMMM dd, yyyy')}
               </p>
-              <p className="text-sm text-gray-900">{group.sum.toString()}</p>
+              <p
+                className={cn(
+                  'text-sm text-gray-900',
+                  group.sum < 1 && 'text-red-500',
+                )}
+              >
+                {formatThousands(group.sum)}
+              </p>
             </div>
             <div className="space-y-4 p-4">
               {group.transaction.map((tx) => (
