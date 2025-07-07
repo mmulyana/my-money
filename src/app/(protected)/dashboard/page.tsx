@@ -6,7 +6,7 @@ import WidgetWallet from '@/features/wallet/components/widget-wallet'
 
 export default function Page() {
   return (
-    <div className="grid h-full grid-cols-1 gap-6 pr-4 pl-4 md:grid-cols-2 md:pr-10 md:pl-[320px]">
+    <div className="flex justify-center gap-6 flex-col md:flex-row">
       <div className="h-full space-y-6">
         <WidgetBudget />
         <WidgetWallet />

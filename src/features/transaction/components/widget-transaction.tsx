@@ -16,7 +16,7 @@ export default function WidgetTransaction() {
     ?.filter((tx) => tx.date)
     .reduce(
       (acc, tx) => {
-        const date = new Date(tx.date!).toISOString().split('T')[0]
+        const date = new Date(tx.date!).toString()
         const existing = acc.find((g) => g.date === date)
         if (existing) {
           existing.transaction.push(tx)
@@ -59,7 +59,7 @@ export default function WidgetTransaction() {
   return (
     <div
       className={cn(
-        'relative h-full w-full rounded-lg border bg-white pt-4',
+        'relative h-full w-full max-w-[452px] rounded-lg border bg-white pt-4',
         isPending && 'pb-4',
       )}
     >

@@ -1,15 +1,15 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card'
 import {
   Form,
   FormControl,
@@ -17,41 +17,41 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { authClient } from "@/lib/utils/auth-client";
-import type { ErrorContext } from "better-auth/client";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import ButtonSubmit from "@/components/common/button-submit";
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import type { ErrorContext } from 'better-auth/client'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
+import ButtonSubmit from '@/components/common/button-submit'
 import {
   loginSchema,
   registerSchema,
   type LoginFormData,
   type RegisterFormData,
-} from "../schema";
+} from '../schema'
+import { authClient } from '@/shared/utils/auth-client'
 
 export default function FormLoginRegister({
   variant,
 }: {
-  variant: "login" | "register";
+  variant: 'login' | 'register'
 }) {
-  const router = useRouter();
-  const [isPending, setIsPending] = useState(false);
+  const router = useRouter()
+  const [isPending, setIsPending] = useState(false)
 
   const form = useForm<LoginFormData | RegisterFormData>({
-    resolver: zodResolver(variant === "login" ? loginSchema : registerSchema),
+    resolver: zodResolver(variant === 'login' ? loginSchema : registerSchema),
     defaultValues: {
-      name: "",
-      email: "",
-      password: "",
+      name: '',
+      email: '',
+      password: '',
     },
-  });
+  })
 
-  const { control, handleSubmit } = form;
+  const { control, handleSubmit } = form
 
-  const onSubmit = async (payload: any) => {
-    if (variant === "login") {
+  const onSubmit = async (payload: LoginFormData | RegisterFormData) => {
+    if (variant === 'login') {
       await authClient.signIn.email(
         {
           email: payload.email,
@@ -59,56 +59,56 @@ export default function FormLoginRegister({
         },
         {
           onRequest: () => {
-            setIsPending(true);
+            setIsPending(true)
           },
           onSuccess: () => {
-            router.push("/dashboard");
+            router.push('/dashboard')
           },
           onError: (ctx: ErrorContext) => {
-            toast.error((ctx.error?.code as string) ?? "Something went wrong", {
-              description: ctx.error.message ?? "Something went wrong.",
-            });
+            toast.error((ctx.error?.code as string) ?? 'Something went wrong', {
+              description: ctx.error.message ?? 'Something went wrong.',
+            })
           },
         },
-      );
-      setIsPending(false);
+      )
+      setIsPending(false)
 
-      return;
+      return
     }
     await authClient.signUp.email(
       {
         email: payload.email,
         password: payload.password,
-        name: payload.name,
+        name: (payload as RegisterFormData).name,
       },
       {
         onRequest: () => setIsPending(true),
         onSuccess: () => {
-          toast.success("Account created");
-          router.push("/login");
+          toast.success('Account created')
+          router.push('/login')
         },
         onError: (ctx) => {
-          toast.error("Something went wrong", {
-            description: ctx.error.message ?? "",
-          });
+          toast.error('Something went wrong', {
+            description: ctx.error.message ?? '',
+          })
         },
       },
-    );
-    setIsPending(false);
-  };
+    )
+    setIsPending(false)
+  }
 
   return (
-    <Card className="mx-auto mt-10 w-full max-w-md rounded-2xl p-4 shadow-xl">
+    <Card className="mx-auto mt-10 w-full max-w-md rounded-2xl p-4">
       <CardHeader>
         <CardTitle className="text-center text-2xl">
-          {variant === "login" ? "Login" : "Register"}
+          {variant === 'login' ? 'Login' : 'Register'}
         </CardTitle>
       </CardHeader>
 
       <Form {...form}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <CardContent className="space-y-4">
-            {variant === "register" && (
+            {variant === 'register' && (
               <FormField
                 control={control}
                 name="name"
@@ -153,15 +153,15 @@ export default function FormLoginRegister({
             />
           </CardContent>
 
-          <CardFooter className="mt-4 mb-6 flex flex-col gap-2">
+          <CardFooter className="mt-6 mb-6 flex flex-col gap-2">
             <ButtonSubmit
               className="w-full"
               isPending={isPending}
-              title={variant === "login" ? "Login" : "Register"}
+              title={variant === 'login' ? 'Login' : 'Register'}
             />
           </CardFooter>
         </form>
       </Form>
     </Card>
-  );
+  )
 }

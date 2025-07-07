@@ -9,6 +9,9 @@ type CategoryItemProps<T extends ElementType = 'div'> = {
   hideType?: boolean
   note?: string
   variant?: 'default' | 'color'
+  styleCategory?: {
+    icon?: string
+  }
 } & ComponentPropsWithoutRef<T>
 
 export default function CategoryItem<T extends ElementType = 'div'>({
@@ -17,6 +20,7 @@ export default function CategoryItem<T extends ElementType = 'div'>({
   hideType = false,
   note,
   variant = 'default',
+  styleCategory,
   ...props
 }: CategoryItemProps<T>) {
   const { className, ...defaultProps } = props
@@ -46,7 +50,10 @@ export default function CategoryItem<T extends ElementType = 'div'>({
           ></div>
           <IconRenderer
             icon={data.icon as any}
-            className="absolute top-1/2 left-1/2 h-8 -translate-x-1/2 -translate-y-1/2"
+            className={cn(
+              'absolute top-1/2 left-1/2 h-6 -translate-x-1/2 -translate-y-1/2',
+              styleCategory?.icon,
+            )}
             style={{
               color: data.color,
             }}

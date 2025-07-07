@@ -53,6 +53,7 @@ export default function ModalEditTransaction({
       utils.transaction.invalidate()
       utils.budget.invalidate()
       utils.wallet.invalidate()
+      utils.category.summaryByCategory.invalidate()
       form.reset()
       setOpen(false)
     },

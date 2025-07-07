@@ -20,7 +20,7 @@ export default function Sidebar(props: SidebarProps) {
   const pathname = usePathname()
 
   return (
-    <div className="absolute hidden w-fit pl-8 md:block">
+    <div className="absolute hidden w-[200px] pl-8 md:block">
       <ul className="space-y-4">
         {props.links.map((link) => {
           const isActive = pathname === link.path
