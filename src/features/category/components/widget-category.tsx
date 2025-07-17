@@ -29,7 +29,7 @@ export default function WidgetCategory() {
     })) ?? []
 
   return (
-    <div className="h-fit w-full max-w-[400px] rounded-lg border bg-white p-6">
+    <div className="h-fit w-full rounded-lg border bg-white p-6">
       <div className="flex items-center justify-between">
         <p className="text-sm">Category</p>
       </div>

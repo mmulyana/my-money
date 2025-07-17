@@ -11,6 +11,7 @@ type CategoryItemProps<T extends ElementType = 'div'> = {
   variant?: 'default' | 'color'
   styleCategory?: {
     icon?: string
+    iconWrapper?: string
   }
 } & ComponentPropsWithoutRef<T>
 
@@ -39,6 +40,7 @@ export default function CategoryItem<T extends ElementType = 'div'>({
           className={cn(
             'relative h-10 w-10 overflow-hidden rounded-full',
             variant === 'color' && 'border',
+            styleCategory?.iconWrapper,
           )}
           style={{ borderColor: variant === 'color' ? data.color : '' }}
         >

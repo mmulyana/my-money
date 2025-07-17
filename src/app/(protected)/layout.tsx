@@ -13,7 +13,7 @@ export default async function Layout({ children }: React.PropsWithChildren) {
     <>
       <Navbar />
       <Sidebar links={menus} />
-      <div className="w-full pr-4 pl-4 md:pr-10 md:pl-[200px]">{children}</div>
+      <div className="w-full pr-4 pl-4 md:pr-10 md:pl-10">{children}</div>
     </>
   )
 }

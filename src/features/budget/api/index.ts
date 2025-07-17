@@ -1,5 +1,6 @@
 import { protectedProcedure } from '@/trpc/helper'
 import { BudgetSchema } from '../schema'
+import { z } from 'zod'
 
 export const readAll = protectedProcedure.query(async ({ ctx }) => {
   const budgets = await ctx.db.budget.findMany({
@@ -53,4 +54,14 @@ export const create = protectedProcedure
       },
     })
     return newBudget
+  })
+
+export const destroy = protectedProcedure
+  .input(
+    z.object({
+      id: z.string(),
+    }),
+  )
+  .mutation(async ({ ctx, input }) => {
+    return ctx.db.budget.delete({ where: { id: input.id } })
   })

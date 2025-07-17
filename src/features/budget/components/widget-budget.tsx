@@ -6,11 +6,15 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { api } from '@/trpc/react'
 
 import ModalAddBudget from './modal-add-budget'
+import { useSetAtom } from 'jotai'
+import { atomBudget } from '@/shared/stores/atom-budget'
 
 export default function WidgetBudget() {
   const { data, isPending } = api.budget.readAll.useQuery()
+  const setBudgetId = useSetAtom(atomBudget)
+
   return (
-    <div className="border-[#EDEDED grid grid-cols-2 gap-4 rounded-xl border bg-white p-6 lg:grid-cols-3">
+    <div className="w-full grid grid-cols-2 gap-4 rounded-xl border border-[#EDEDED] bg-white p-6 lg:grid-cols-3">
       {isPending ? (
         <>
           <Skeleton className="h-36 w-full bg-gray-200" />
@@ -20,6 +24,7 @@ export default function WidgetBudget() {
         data?.map((i) => (
           <div
             key={i.id}
+            onClick={() => setBudgetId(i.id)}
             className="flex flex-col items-center space-y-2 rounded-lg pb-1 hover:bg-gray-100/60"
           >
             <CircularProgress

@@ -5,8 +5,10 @@ import WidgetCategory from '@/features/category/components/widget-category'
 
 export default function Page() {
   return (
-    <div className="flex flex-col justify-center gap-6 md:flex-row">
-      <WidgetTransaction />
+    <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-6 lg:grid-cols-3">
+      <div className="col-start-1 h-full w-full space-y-6 lg:col-start-2">
+        <WidgetTransaction />
+      </div>
       <WidgetCategory />
     </div>
   )
