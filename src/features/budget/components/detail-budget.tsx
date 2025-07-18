@@ -1,41 +1,73 @@
-import { useAtom, useAtomValue } from 'jotai'
-import { Trash } from 'lucide-react'
+import { Ellipsis, Trash } from 'lucide-react'
+import { differenceInDays } from 'date-fns'
+import { useAtom } from 'jotai'
 import { useMemo } from 'react'
 
 import BarProgress from '@/components/common/bar-progress'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 
 import { atomBudget } from '@/shared/stores/atom-budget'
 import { api } from '@/trpc/react'
 
+import SheetTransaction from './sheet-transaction'
 import SelectBudget from './select-budget'
-import { differenceInDays } from 'date-fns'
 import SpendingTip from './spending-tips'
-import WidgetBudget from './widget-budget'
-import WidgetTransaction from '@/features/transaction/components/widget-transaction'
 
 export default function BudgetDetail() {
   const [budgetId, setBudgetId] = useAtom(atomBudget)
 
   const utils = api.useUtils()
-  const { data } = api.budget.readAll.useQuery()
+  const { data: budgets } = api.budget.readAll.useQuery()
   const { mutate: destroy } = api.budget.destroy.useMutation()
 
   const budget = useMemo(() => {
-    if (!budgetId || budgetId === '') return
-    return data?.find((i) => i.id === budgetId)
-  }, [data, budgetId])
+    return budgets?.find((b) => b.id === budgetId)
+  }, [budgets, budgetId])
 
-  if (!budgetId) {
-    return null
-  }
+  if (!budget) return null
 
   return (
-    <div className="h-fit w-full rounded-xl border border-[#EDEDED] bg-white">
+    <div className="relative h-fit w-full rounded-xl border border-[#EDEDED] bg-white">
       <div className="px-6 py-4">
-        <div className="mb-4 flex items-center justify-between">
-          <SelectBudget budget={budget} />
-        </div>
+        <SelectBudget budget={budget} />
+        <Popover>
+          <PopoverTrigger
+            className={buttonVariants({
+              variant: 'ghost',
+              size: 'icon',
+              className: 'absolute top-2 right-2',
+            })}
+          >
+            <Ellipsis />
+          </PopoverTrigger>
+          <PopoverContent align="end" className="w-fit overflow-hidden !p-0">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="!rounded-none text-red-500 hover:text-red-700"
+              onClick={() =>
+                budget?.id &&
+                destroy(
+                  { id: budget?.id },
+                  {
+                    onSuccess: () => {
+                      setBudgetId(null)
+                      utils.budget.invalidate()
+                    },
+                  },
+                )
+              }
+            >
+              <Trash />
+              Delete budget
+            </Button>
+          </PopoverContent>
+        </Popover>
         <BarProgress
           color={budget?.category.color || ''}
           percentage={budget?.percentage || 0}
@@ -66,7 +98,7 @@ export default function BudgetDetail() {
           </div>
         </div>
 
-        <div className="mt-4">
+        <div className="mt-4 mb-6">
           <SpendingTip
             amount={budget?.amount || 0}
             remaining={budget?.remaining || 0}
@@ -74,26 +106,7 @@ export default function BudgetDetail() {
           />
         </div>
 
-        <Button
-          className="mt-10 h-fit !p-0 text-red-500 hover:bg-transparent hover:text-red-700"
-          variant="ghost"
-          size="sm"
-          onClick={() =>
-            budget?.id &&
-            destroy(
-              { id: budget?.id },
-              {
-                onSuccess: () => {
-                  setBudgetId(null)
-                  utils.budget.invalidate()
-                },
-              },
-            )
-          }
-        >
-          <Trash />
-          Delete budget
-        </Button>
+        <SheetTransaction />
       </div>
     </div>
   )
