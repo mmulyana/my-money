@@ -30,9 +30,15 @@ export function ComboboxCategory({
   onValueChange: (val: string) => void
 }) {
   const [open, setOpen] = useState(false)
-  const [value, setValue] = useState(defaultValue || '')
+  const [value, setValue] = useState('')
 
   const { data } = api.category.readAll.useQuery()
+
+  useEffect(() => {
+    if (defaultValue) {
+      setValue(defaultValue)
+    }
+  }, [])
 
   useEffect(() => {
     if (value !== '') onValueChange(value)

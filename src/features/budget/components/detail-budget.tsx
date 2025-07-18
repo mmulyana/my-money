@@ -1,4 +1,4 @@
-import { Ellipsis, Trash } from 'lucide-react'
+import { Ellipsis, Pencil, Trash } from 'lucide-react'
 import { differenceInDays } from 'date-fns'
 import { useAtom } from 'jotai'
 import { useMemo } from 'react'
@@ -17,6 +17,7 @@ import { api } from '@/trpc/react'
 import SheetTransaction from './sheet-transaction'
 import SelectBudget from './select-budget'
 import SpendingTip from './spending-tips'
+import ModalEditBudget from './modal-edit-budget'
 
 export default function BudgetDetail() {
   const [budgetId, setBudgetId] = useAtom(atomBudget)
@@ -45,11 +46,24 @@ export default function BudgetDetail() {
           >
             <Ellipsis />
           </PopoverTrigger>
-          <PopoverContent align="end" className="w-fit overflow-hidden !p-0">
+          <PopoverContent
+            align="end"
+            className="flex w-fit flex-col overflow-hidden !p-0"
+          >
+            <ModalEditBudget id={budgetId as string}>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start !rounded-none"
+              >
+                <Pencil />
+                Edit
+              </Button>
+            </ModalEditBudget>
             <Button
               variant="ghost"
               size="sm"
-              className="!rounded-none text-red-500 hover:text-red-700"
+              className="justify-start !rounded-none text-red-500 hover:text-red-700"
               onClick={() =>
                 budget?.id &&
                 destroy(

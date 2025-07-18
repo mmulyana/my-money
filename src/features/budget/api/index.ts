@@ -55,6 +55,18 @@ export const create = protectedProcedure
     })
     return newBudget
   })
+  
+export const update = protectedProcedure
+  .input(BudgetSchema.extend({ id: z.string() }))
+  .mutation(async ({ ctx, input }) => {
+    return ctx.db.budget.update({
+      data: {
+        ...input,
+        createdBy: ctx.user.id,
+      },
+      where: { id: input.id },
+    })
+  })
 
 export const destroy = protectedProcedure
   .input(
@@ -65,3 +77,8 @@ export const destroy = protectedProcedure
   .mutation(async ({ ctx, input }) => {
     return ctx.db.budget.delete({ where: { id: input.id } })
   })
+export const read = protectedProcedure
+  .input(z.object({ id: z.string() }))
+  .query(async ({ ctx, input }) =>
+    ctx.db.budget.findUnique({ where: { id: input.id } }),
+  )
