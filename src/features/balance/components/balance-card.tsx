@@ -1,8 +1,10 @@
 'use client'
 
-import AnimatedTab from '@/shared/components/common/animated-tab'
-import { ExpenseAreaChart } from './expense-area-chart'
 import { useState } from 'react'
+
+import AnimatedTab from '@/shared/components/common/animated-tab'
+
+import { ExpenseAreaChart } from './expense-area-chart'
 import { IncomeAreaChart } from './income-area-chart'
 
 export default function BalanceCard() {
@@ -24,7 +26,7 @@ export default function BalanceCard() {
 					<p className='font-medium text-foreground'>Rp 3,000,000</p>
 				</div>
 			</div>
-			<div className='w-[306px] shrink-0 flex flex-col justify-between gap-4'>
+			<div className='border w-[360px] shrink-0 flex flex-col justify-between gap-4'>
 				<div className='flex justify-between items-start'>
 					<div className='space-y-0.5'>
 						<p className='text-xs text-foreground/40'>Summary</p>

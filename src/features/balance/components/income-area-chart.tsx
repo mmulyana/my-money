@@ -29,7 +29,7 @@ const chartConfig = {
 
 export function IncomeAreaChart() {
 	return (
-		<ChartContainer config={chartConfig} className='w-[328px] h-[104px]'>
+		<ChartContainer config={chartConfig} className='w-[390px] h-[104px]'>
 			<AreaChart
 				accessibilityLayer
 				data={chartData}
