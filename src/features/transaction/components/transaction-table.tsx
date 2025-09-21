@@ -70,14 +70,22 @@ export default function TransactionTable() {
 					<div className='flex gap-4 items-center'>
 						<Popover>
 							<PopoverTrigger className='flex gap-1.5 items-center'>
-								<Filter strokeWidth={2.5} size={16} className='text-muted-foreground' />
+								<Filter
+									strokeWidth={2.5}
+									size={16}
+									className='text-muted-foreground'
+								/>
 								<span className='text-sm text-muted-foreground'>Filter</span>
 							</PopoverTrigger>
 							<PopoverContent align='start' className='w-40'></PopoverContent>
 						</Popover>
 						<Popover>
 							<PopoverTrigger className='flex gap-1.5 items-center'>
-								<ArrowUpDown strokeWidth={2.5} size={16} className='text-muted-foreground' />
+								<ArrowUpDown
+									strokeWidth={2.5}
+									size={16}
+									className='text-muted-foreground'
+								/>
 								<span className='text-sm text-muted-foreground'>Sort</span>
 							</PopoverTrigger>
 							<PopoverContent align='start' className='w-40'></PopoverContent>
