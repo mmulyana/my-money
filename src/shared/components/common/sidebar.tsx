@@ -22,7 +22,7 @@ export function Sidebar() {
 	const pathname = usePathname()
 
 	return (
-		<div className='h-full py-4 pl-4 flex flex-col'>
+		<div className='h-full pl-4 flex flex-col'>
 			<div className='flex gap-2 items-center'>
 				<div className='h-7 w-7 rounded-full bg-primary flex justify-center items-center text-white'>
 					<IcPig className='w-[18px] h-[18px]' />
