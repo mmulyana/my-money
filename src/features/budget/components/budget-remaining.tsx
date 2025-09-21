@@ -40,7 +40,7 @@ export default function BudgetRemaining({
 				</div>
 			</div>
 
-			<div className='p-4 bg-white rounded-xl shadow shadow-muted-foreground/20 w-96 font-sans'>
+			<div className='p-4 bg-white rounded-xl shadow shadow-muted-foreground/20 w-full font-sans'>
 				<p className='text-foreground/50 text-sm mb-1.5'>Remaining Budget</p>
 				<h2 className='text-lg font-medium mb-4'>{remainingBudget}</h2>
 				<div className='w-full bg-gray-100 rounded-full h-2 mb-2'>

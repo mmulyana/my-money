@@ -5,7 +5,6 @@ import { cn } from '@/shared/lib/utils'
 
 type Tab = {
 	name: string
-	onClick: () => void
 }
 
 interface AnimatedTabProps {
@@ -66,7 +65,6 @@ export default function AnimatedTab({
 									setUncontrolledActiveIndex(index)
 								}
 								onChange?.(index)
-								tab.onClick()
 							}}
 						>
 							<div className='text-sm leading-5 whitespace-nowrap flex items-center justify-center h-full'>

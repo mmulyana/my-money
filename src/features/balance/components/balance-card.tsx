@@ -26,7 +26,7 @@ export default function BalanceCard() {
 					<p className='font-medium text-foreground'>Rp 3,000,000</p>
 				</div>
 			</div>
-			<div className='border w-[360px] shrink-0 flex flex-col justify-between gap-4'>
+			<div className='w-[360px] shrink-0 flex flex-col justify-between gap-4'>
 				<div className='flex justify-between items-start'>
 					<div className='space-y-0.5'>
 						<p className='text-xs text-foreground/40'>Summary</p>
@@ -34,15 +34,9 @@ export default function BalanceCard() {
 							tabs={[
 								{
 									name: 'Expense',
-									onClick: () => {
-										console.log('a')
-									},
 								},
 								{
 									name: 'Income',
-									onClick: () => {
-										console.log('a')
-									},
 								},
 							]}
 							activeIndex={tabIndex}
