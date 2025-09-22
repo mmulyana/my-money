@@ -7,7 +7,7 @@ function useCalendarMonth() {
 
 	const month = useMemo(() => {
 		return currentDate.toLocaleDateString('en-US', {
-			month: 'long',
+			month: 'short',
 			year: 'numeric',
 		})
 	}, [currentDate])
