@@ -9,7 +9,7 @@ export default function TransactionItem(
 	return (
 		<div
 			className={cn(
-				'flex items-center justify-between py-3 px-4 hover:bg-gray-200/20 group',
+				'flex items-center justify-between py-3 px-4 hover:bg-gray-200/20 group cursor-pointer',
 				props.border && 'border-b border-border'
 			)}
 		>

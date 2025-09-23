@@ -1,15 +1,17 @@
 'use client'
 
 import {
-	IconCalendar,
-	IconCalendarMonth,
 	IconCalendarMonthFilled,
 	IconChevronLeft,
 	IconChevronRight,
+	IconPlus,
 } from '@tabler/icons-react'
 
 import useCalendarMonth from '@/shared/hooks/use-calendar-month'
 import { TransactionGroup } from '@/features/transaction/components/transaction-group'
+import TransactionForm from '@/features/transaction/components/transaction-form'
+import { Button } from '@/shared/components/ui/button'
+import { Plus } from 'lucide-react'
 
 export default function Transaction() {
 	const { month, next, prev } = useCalendarMonth()
@@ -82,6 +84,12 @@ export default function Transaction() {
 					},
 				]}
 			/>
+
+			<TransactionForm>
+				<Button suppressHydrationWarning className='fixed bottom-6 right-6 rounded-full !p-0 w-16 md:h-10 h-16 md:w-10'>
+					<Plus size={32} strokeWidth={3} />
+				</Button>
+			</TransactionForm>
 		</div>
 	)
 }
