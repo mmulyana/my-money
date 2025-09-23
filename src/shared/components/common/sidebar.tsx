@@ -21,7 +21,7 @@ import WalletForm from '@/features/wallet/components/wallet-form'
 import { cn } from '@/shared/lib/utils'
 
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
-import { Button } from '../ui/button'
+import { Button, buttonVariants } from '../ui/button'
 
 const menuItems = [
 	{ icon: IconSmartHome, label: 'Home', href: '/dashboard' },
@@ -64,20 +64,28 @@ export function Sidebar() {
 							</button>
 						</PopoverTrigger>
 						<PopoverContent align='start' className='w-[210px] p-1 rounded-lg'>
-							<Button
-								variant={'secondary'}
-								className='bg-transparent text-muted-foreground hover:text-primary w-full justify-start'
+							<Link
+								href={'/dashboard/wallet'}
+								className={buttonVariants({
+									variant: 'secondary',
+									className:
+										'bg-transparent text-muted-foreground hover:text-primary w-full justify-start',
+								})}
 							>
 								<IconWallet size={18} />
 								Wallet
-							</Button>
-							<Button
-								variant={'secondary'}
-								className='bg-transparent text-muted-foreground hover:text-primary w-full justify-start'
+							</Link>
+							<Link
+								href={'/dashboard/category'}
+								className={buttonVariants({
+									variant: 'secondary',
+									className:
+										'bg-transparent text-muted-foreground hover:text-primary w-full justify-start',
+								})}
 							>
 								<IconCategory size={18} />
 								Category
-							</Button>
+							</Link>
 						</PopoverContent>
 					</Popover>
 				</nav>
