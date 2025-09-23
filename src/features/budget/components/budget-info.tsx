@@ -18,7 +18,7 @@ export default function BudgetInfo() {
 			<div className='flex justify-between items-center mb-2'>
 				<div className='flex gap-2 items-center'>
 					<IconMap size={16} className='text-[#2B88F3]' />
-					<span className='text-xs text-foreground'>Budget</span>
+					<span className='text-sm font-medium text-foreground'>Budget</span>
 				</div>
 				<button className='right-4 absolute cursor-pointer group-hover:flex hidden text-xs text-foreground gap-0.5 transition-all ease-in hover:gap-1 px-1.5 py-1 rounded hover:bg-gray-100 roundedlg'>
 					<IconPencil size={16} />

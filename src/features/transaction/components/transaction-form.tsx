@@ -1,22 +1,6 @@
-import { Combobox } from '@/shared/components/common/combobox'
-import { Button, buttonVariants } from '@/shared/components/ui/button'
-import {
-	Form,
-	FormField,
-	FormItem,
-	FormLabel,
-} from '@/shared/components/ui/form'
-import { Input } from '@/shared/components/ui/input'
-import { Label } from '@/shared/components/ui/label'
-import {
-	Sheet,
-	SheetContent,
-	SheetTitle,
-	SheetTrigger,
-} from '@/shared/components/ui/sheet'
-import { Tabs, TabsList, TabsTrigger } from '@/shared/components/ui/tabs'
-import { Textarea } from '@/shared/components/ui/textarea'
 import { Close } from '@radix-ui/react-dialog'
+import { ChevronsUpDown } from 'lucide-react'
+import { useForm } from 'react-hook-form'
 import {
 	IconAlignJustified,
 	IconArrowDownRight,
@@ -27,8 +11,21 @@ import {
 	IconChevronLeft,
 	IconWallet,
 } from '@tabler/icons-react'
-import { ChevronsUpDown, XIcon } from 'lucide-react'
-import { useForm } from 'react-hook-form'
+
+import { Tabs, TabsList, TabsTrigger } from '@/shared/components/ui/tabs'
+import { Form, FormField, FormItem } from '@/shared/components/ui/form'
+import { Button, buttonVariants } from '@/shared/components/ui/button'
+import ButtonClose from '@/shared/components/common/button-close'
+import { Combobox } from '@/shared/components/common/combobox'
+import { Textarea } from '@/shared/components/ui/textarea'
+import { Input } from '@/shared/components/ui/input'
+import { Label } from '@/shared/components/ui/label'
+import {
+	Sheet,
+	SheetContent,
+	SheetTitle,
+	SheetTrigger,
+} from '@/shared/components/ui/sheet'
 
 const frameworks = [
 	{ value: 'next.js', label: 'Next.js' },
@@ -78,12 +75,8 @@ export default function TransactionForm({ children }: React.PropsWithChildren) {
 								<Button type='submit' className='h-7 rounded font-normal'>
 									Save
 								</Button>
-								<Close
-									type='button'
-									className='ring-offset-background focus:ring-ring data-[state=open]:bg-secondary rounded opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none h-7 bg-white px-1 border border-border'
-								>
-									<XIcon className='size-4' />
-									<span className='sr-only'>Close</span>
+								<Close type='button'>
+									<ButtonClose />
 								</Close>
 							</div>
 						</div>

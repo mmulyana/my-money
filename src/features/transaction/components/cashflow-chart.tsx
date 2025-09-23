@@ -100,9 +100,9 @@ export default function CashflowChart() {
 				<div>
 					<div className='flex gap-2 items-center'>
 						<IconChartBar size={16} className='text-[#2B88F3]' />
-						<span className='text-xs text-foreground'>Daily Cashflow</span>
+						<span className='text-sm font-medium text-foreground'>Overview</span>
 					</div>
-					<p className='text-xs text-muted-foreground/50'>
+					<p className='text-sm text-muted-foreground/50'>
 						Track your daily income and expenses
 					</p>
 				</div>

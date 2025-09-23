@@ -1,5 +1,6 @@
 'use client'
 
+import { ChevronsUpDown, Ellipsis } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { ComponentType } from 'react'
 import Link from 'next/link'
@@ -15,8 +16,8 @@ import {
 	IconSmartHome,
 	IconShoppingBag,
 } from '@tabler/icons-react'
-import { ChevronsUpDown, Ellipsis } from 'lucide-react'
 
+import WalletForm from '@/features/wallet/components/wallet-form'
 import { cn } from '@/shared/lib/utils'
 
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
@@ -83,15 +84,17 @@ export function Sidebar() {
 				<div className='space-y-2'>
 					<div className='flex justify-between items-center'>
 						<div className='flex gap-1 items-center text-foreground/80'>
-							<IconWallet size={18} />
+							<IconWallet size={20} />
 							<p className='font-medium text-sm'>Wallet</p>
 						</div>
-						<Button
-							className='p-0 h-5 w-5 hover:bg-gray-200 rounded'
-							variant={'secondary'}
-						>
-							<IconPlus />
-						</Button>
+						<WalletForm>
+							<Button
+								className='p-0 h-6 w-5 hover:bg-gray-200 rounded'
+								variant={'secondary'}
+							>
+								<IconPlus />
+							</Button>
+						</WalletForm>
 					</div>
 					<div className='space-y-3.5'>
 						<div className='flex justify-between items-center'>
