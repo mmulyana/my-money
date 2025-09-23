@@ -52,7 +52,7 @@ export default function TransactionForm({ children }: React.PropsWithChildren) {
 	const onSubmit = (data: any) => {}
 
 	return (
-		<Sheet defaultOpen>
+		<Sheet>
 			<SheetTrigger asChild>{children}</SheetTrigger>
 			<SheetContent className='h-full w-full md:w-[400px]' hideClose>
 				<Form {...form}>

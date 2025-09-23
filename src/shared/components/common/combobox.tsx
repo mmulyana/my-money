@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
 import { Check, ChevronsUpDown } from 'lucide-react'
-import { cn } from '@/shared/lib/utils'
+import { useState } from 'react'
+
 import { Button } from '@/shared/components/ui/button'
+import { cn } from '@/shared/lib/utils'
 import {
 	Command,
 	CommandEmpty,
