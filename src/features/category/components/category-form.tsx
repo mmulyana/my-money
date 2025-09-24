@@ -19,30 +19,77 @@ import {
 	PopoverTrigger,
 } from '@/shared/components/ui/popover'
 import { defaultColorsPicker } from '@/shared/constants/color-picker'
+import { TransactionType } from '@/shared/types'
 import { IconCategory, IconCheck } from '@tabler/icons-react'
 import { Pipette } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { HexColorPicker } from 'react-colorful'
 import { useForm } from 'react-hook-form'
+import { useCreateCategory } from '../api/create-category'
+import { useUpdateCategory } from '../api/update-category'
+
+type Form = {
+	name: string
+	color: string
+	parentId: string | null
+	type: TransactionType
+}
 
 export default function CategoryForm({
 	children,
 	parentId,
+	type,
+	name,
+	id,
+	color,
 }: React.PropsWithChildren & {
+	type: TransactionType
 	parentId?: string
+	id?: string
+	name?: string
+	color?: string
 }) {
 	const [open, setOpen] = useState(false)
 
-	const form = useForm({
+	const { mutate: create } = useCreateCategory()
+	const { mutate: update } = useUpdateCategory()
+
+	const form = useForm<Form>({
 		defaultValues: {
 			name: '',
 			color: '#187D86',
-			parentId: parentId || null,
+			parentId: null,
+			type: 'expense',
 		},
 	})
 	const colorWatch = form.watch('color')
 
-	const onSubmit = (data: any) => {}
+	const onSubmit = (data: Form) => {
+		console.log('test 2')
+		if (!!id) {
+			console.log('test 3')
+			update(
+				{ ...data, id },
+				{
+					onSuccess: () => {
+						setOpen(false)
+					},
+					onError: (err) => {
+						console.log(err)
+					},
+				}
+			)
+			return
+		}
+		create(
+			{ ...data, type },
+			{
+				onSuccess: () => {
+					setOpen(false)
+				},
+			}
+		)
+	}
 
 	useEffect(() => {
 		if (!open) {
@@ -53,6 +100,17 @@ export default function CategoryForm({
 			})
 		}
 	}, [open])
+
+	useEffect(() => {
+		if (id && name && color && type) {
+			form.reset({
+				parentId,
+				name,
+				color,
+				type,
+			})
+		}
+	}, [parentId, id, name, color, type])
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -97,6 +155,7 @@ export default function CategoryForm({
 														<button
 															key={index}
 															role='radio'
+															type='button'
 															aria-checked={isSelected}
 															className='h-[34px] w-[34px] rounded-md transition p-1 border focus:outline-none focus:ring-2 focus:ring-offset-2 ring-gray-400'
 															onClick={() => field.onChange(color)}
@@ -117,7 +176,10 @@ export default function CategoryForm({
 													)
 												})}
 												<Popover>
-													<PopoverTrigger className='h-[34px] w-[34px] rounded-md transition p-1 border focus:outline-none focus:ring-2 focus:ring-offset-2 ring-gray-400'>
+													<PopoverTrigger
+														type='button'
+														className='h-[34px] w-[34px] rounded-md transition p-1 border focus:outline-none focus:ring-2 focus:ring-offset-2 ring-gray-400'
+													>
 														<div
 															className='h-full w-full rounded-full flex justify-center items-center'
 															style={{
@@ -143,7 +205,15 @@ export default function CategoryForm({
 									</FormItem>
 								)}
 							/>
-							<Button className='w-full'>Save</Button>
+							<Button
+								className='w-full'
+								type='submit'
+								onClick={() => {
+									console.log('test')
+								}}
+							>
+								Save
+							</Button>
 						</div>
 					</form>
 				</Form>

@@ -18,3 +18,5 @@ export type Pagination = {
 	limit?: number
 	cursor?: string
 }
+
+export type TransactionType = 'expense' | 'income' | 'transfer'
