@@ -1,17 +1,7 @@
-'use client'
-
-import { IconCheck, IconWallet } from '@tabler/icons-react'
-import { HexColorPicker } from 'react-colorful'
-import { Close } from '@radix-ui/react-dialog'
-import { useForm } from 'react-hook-form'
-import { Pipette } from 'lucide-react'
-
-import ButtonClose from '@/shared/components/common/button-close'
+import DialogTopHeader from '@/shared/components/common/dialog-topheader'
 import { Button } from '@/shared/components/ui/button'
-import { Input } from '@/shared/components/ui/input'
 import {
 	Dialog,
-	DialogTitle,
 	DialogContent,
 	DialogTrigger,
 } from '@/shared/components/ui/dialog'
@@ -22,24 +12,34 @@ import {
 	FormItem,
 	FormLabel,
 } from '@/shared/components/ui/form'
+import { Input } from '@/shared/components/ui/input'
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
 } from '@/shared/components/ui/popover'
 import { defaultColorsPicker } from '@/shared/constants/color-picker'
+import { IconCategory, IconCheck } from '@tabler/icons-react'
+import { Pipette } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { HexColorPicker } from 'react-colorful'
+import { useForm } from 'react-hook-form'
 
-export default function WalletForm({ children }: React.PropsWithChildren) {
+export default function CategoryForm({
+	children,
+	parentId,
+}: React.PropsWithChildren & {
+	parentId?: string
+}) {
 	const [open, setOpen] = useState(false)
 
 	const form = useForm({
 		defaultValues: {
 			name: '',
 			color: '#187D86',
+			parentId: parentId || null,
 		},
 	})
-
 	const colorWatch = form.watch('color')
 
 	const onSubmit = (data: any) => {}
@@ -49,6 +49,7 @@ export default function WalletForm({ children }: React.PropsWithChildren) {
 			form.reset({
 				name: '',
 				color: '#187D86',
+				parentId: parentId || null,
 			})
 		}
 	}, [open])
@@ -59,17 +60,10 @@ export default function WalletForm({ children }: React.PropsWithChildren) {
 			<DialogContent className='p-0 bg-background'>
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)}>
-						<div className='p-3 border-b flex justify-between items-center bg-white rounded-t-lg'>
-							<div className='flex gap-2 items-center'>
-								<IconWallet size={18} />
-								<DialogTitle className='text-foreground text-base md:text-sm'>
-									New Wallet
-								</DialogTitle>
-							</div>
-							<Close>
-								<ButtonClose />
-							</Close>
-						</div>
+						<DialogTopHeader
+							title={!!parentId ? 'New Child Category' : 'New Category'}
+							icon={IconCategory}
+						/>
 						<div className='p-4'>
 							<FormField
 								control={form.control}
