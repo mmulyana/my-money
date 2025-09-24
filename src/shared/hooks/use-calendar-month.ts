@@ -28,7 +28,14 @@ function useCalendarMonth() {
 		})
 	}
 
-	return { month, next, prev, currentDate }
+	return {
+		month,
+		next,
+		prev,
+		currentDate,
+		monthIndex: currentDate.getMonth(),
+		year: currentDate.getFullYear(),
+	}
 }
 
 export default useCalendarMonth

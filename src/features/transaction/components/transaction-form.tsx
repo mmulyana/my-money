@@ -1,6 +1,8 @@
 import { Close } from '@radix-ui/react-dialog'
 import { ChevronsUpDown } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import { useMemo, useState } from 'react'
+import { format } from 'date-fns'
 import {
 	IconAlignJustified,
 	IconArrowDownRight,
@@ -27,29 +29,62 @@ import {
 	SheetTrigger,
 } from '@/shared/components/ui/sheet'
 
-const frameworks = [
-	{ value: 'next.js', label: 'Next.js' },
-	{ value: 'sveltekit', label: 'SvelteKit' },
-	{ value: 'nuxt.js', label: 'Nuxt.js' },
-	{ value: 'remix', label: 'Remix' },
-	{ value: 'astro', label: 'Astro' },
-]
+import { useGetCategories } from '@/features/category/api/get-category'
+import { useGetWallet } from '@/features/wallet/api/get-wallet'
+import { TransactionType } from '@/shared/types'
+
+import { useCreateTransaction } from '../api/create-transaction'
+import { TransactionForm as FormValues } from '../types/form'
 
 export default function TransactionForm({ children }: React.PropsWithChildren) {
-	const form = useForm({
+	const [open, setOpen] = useState(false)
+	const [type, setType] = useState<TransactionType>('expense')
+
+	const { data: categories } = useGetCategories({})
+	const { data: wallets } = useGetWallet({})
+
+	const categoryOptions = useMemo(() => {
+		return categories?.data?.map((i) => ({
+			value: i.id,
+			label: i.name,
+		}))
+	}, [categories?.data])
+
+	const walletOptions = useMemo(() => {
+		return wallets?.data?.map((i) => ({
+			value: i.id,
+			label: i.name,
+		}))
+	}, [wallets?.data])
+
+	const { mutate } = useCreateTransaction()
+
+	const form = useForm<FormValues>({
 		defaultValues: {
 			amount: 0,
 			remark: '',
-			date: '',
+			date: format(new Date(), 'yyyy-MM-dd'),
 			categoryId: '',
 			walletId: '',
 		},
 	})
 
-	const onSubmit = (data: any) => {}
+	const onSubmit = (data: FormValues) => {
+		mutate(
+			{ ...data, type },
+			{
+				onSuccess: () => {
+					setOpen(false)
+				},
+				onError: (err) => {
+					console.log(err)
+				},
+			}
+		)
+	}
 
 	return (
-		<Sheet>
+		<Sheet open={open} onOpenChange={setOpen}>
 			<SheetTrigger asChild>{children}</SheetTrigger>
 			<SheetContent className='h-full w-full md:w-[400px]' hideClose>
 				<Form {...form}>
@@ -101,10 +136,11 @@ export default function TransactionForm({ children }: React.PropsWithChildren) {
 									)}
 								/>
 
-								<Tabs defaultValue='expense'>
+								<Tabs defaultValue='expense' value={type}>
 									<TabsList className='rounded-md h-fit border mx-auto'>
 										<TabsTrigger
 											value='expense'
+											onClick={() => setType('expense')}
 											className='text-base md:text-sm px-2.5 py-0.5 h-fit rounded data-[state=active]:bg-white group'
 										>
 											<IconArrowDownRight className='group-data-[state=active]:text-red-500' />
@@ -112,6 +148,7 @@ export default function TransactionForm({ children }: React.PropsWithChildren) {
 										</TabsTrigger>
 										<TabsTrigger
 											value='income'
+											onClick={() => setType('income')}
 											className='text-base md:text-sm px-2.5 py-0.5 h-fit rounded data-[state=active]:bg-white group'
 										>
 											<IconArrowUpRight className='group-data-[state=active]:text-teal-600' />
@@ -119,6 +156,7 @@ export default function TransactionForm({ children }: React.PropsWithChildren) {
 										</TabsTrigger>
 										<TabsTrigger
 											value='transfer'
+											onClick={() => setType('transfer')}
 											className='text-base md:text-sm px-2.5 py-0.5 h-fit rounded data-[state=active]:bg-white group'
 										>
 											<IconArrowsExchange className='group-data-[state=active]:text-blue-600' />
@@ -141,7 +179,7 @@ export default function TransactionForm({ children }: React.PropsWithChildren) {
 														</Label>
 													</div>
 													<Combobox
-														options={frameworks}
+														options={categoryOptions || []}
 														value={field.value}
 														onValueChange={field.onChange}
 														notFoundContent={
@@ -156,7 +194,7 @@ export default function TransactionForm({ children }: React.PropsWithChildren) {
 																className='w-44 justify-between bg-white'
 															>
 																{field.value
-																	? frameworks.find(
+																	? categoryOptions?.find(
 																			(opt) => opt.value === field.value
 																	  )?.label
 																	: 'Pilih Kategori'}
@@ -179,7 +217,7 @@ export default function TransactionForm({ children }: React.PropsWithChildren) {
 														</Label>
 													</div>
 													<Combobox
-														options={frameworks}
+														options={walletOptions || []}
 														value={field.value}
 														onValueChange={field.onChange}
 														notFoundContent={
@@ -194,7 +232,7 @@ export default function TransactionForm({ children }: React.PropsWithChildren) {
 																className='w-44 justify-between bg-white'
 															>
 																{field.value
-																	? frameworks.find(
+																	? walletOptions?.find(
 																			(opt) => opt.value === field.value
 																	  )?.label
 																	: 'Pilih akun'}
