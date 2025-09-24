@@ -2,17 +2,15 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/shared/lib/api-client'
 import { keys } from '@/shared/constants/key'
 
-import { TransactionForm } from '../types/form'
-
-export const createTransaction = (body: TransactionForm) => {
-	return api.post('transaction', { json: body })
+export const destroyTransaction = (body: { id: string }) => {
+	return api.delete(`transaction/${body.id}`)
 }
 
-export const useCreateTransaction = () => {
+export const useDestroyTransaction = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: createTransaction,
+		mutationFn: destroyTransaction,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: [keys.Transaction] })
 			queryClient.invalidateQueries({ queryKey: [keys.Wallet] })

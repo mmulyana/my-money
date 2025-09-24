@@ -32,7 +32,7 @@ export function Sidebar() {
 	const pathname = usePathname()
 
 	return (
-		<div className='h-full w-[240px] p-4 hidden lg:flex flex-col fixed -z-10'>
+		<div className='h-full w-[240px] p-4 hidden lg:flex flex-col fixed -z-10 lg:z-10'>
 			<div className='flex gap-2 items-center'>
 				<div className='h-7 w-7 rounded-full bg-primary flex justify-center items-center text-white'>
 					<IconPigFilled className='w-[18px] h-[18px]' />

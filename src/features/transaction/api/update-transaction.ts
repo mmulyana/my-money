@@ -4,15 +4,15 @@ import { keys } from '@/shared/constants/key'
 
 import { TransactionForm } from '../types/form'
 
-export const createTransaction = (body: TransactionForm) => {
-	return api.post('transaction', { json: body })
+export const updateTransaction = (body: TransactionForm & { id: string }) => {
+	return api.patch(`transaction/${body.id}`, { json: body })
 }
 
-export const useCreateTransaction = () => {
+export const useUpdateTransaction = () => {
 	const queryClient = useQueryClient()
 
 	return useMutation({
-		mutationFn: createTransaction,
+		mutationFn: updateTransaction,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: [keys.Transaction] })
 			queryClient.invalidateQueries({ queryKey: [keys.Wallet] })

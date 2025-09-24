@@ -1,7 +1,7 @@
 import { Close } from '@radix-ui/react-dialog'
 import { ChevronsUpDown } from 'lucide-react'
 import { useForm } from 'react-hook-form'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { format } from 'date-fns'
 import {
 	IconAlignJustified,
@@ -35,12 +35,18 @@ import { TransactionType } from '@/shared/types'
 
 import { useCreateTransaction } from '../api/create-transaction'
 import { TransactionForm as FormValues } from '../types/form'
+import { Transaction } from '../types'
+import { useUpdateTransaction } from '../api/update-transaction'
+import { useDestroyTransaction } from '../api/destroy-transaction'
 
-export default function TransactionForm({ children }: React.PropsWithChildren) {
+export default function TransactionForm({
+	children,
+	data,
+}: React.PropsWithChildren & { data?: Partial<Transaction> }) {
 	const [open, setOpen] = useState(false)
 	const [type, setType] = useState<TransactionType>('expense')
 
-	const { data: categories } = useGetCategories({})
+	const { data: categories } = useGetCategories({ type })
 	const { data: wallets } = useGetWallet({})
 
 	const categoryOptions = useMemo(() => {
@@ -57,7 +63,9 @@ export default function TransactionForm({ children }: React.PropsWithChildren) {
 		}))
 	}, [wallets?.data])
 
-	const { mutate } = useCreateTransaction()
+	const { mutate: create } = useCreateTransaction()
+	const { mutate: update } = useUpdateTransaction()
+	const { mutate: destroy } = useDestroyTransaction()
 
 	const form = useForm<FormValues>({
 		defaultValues: {
@@ -69,9 +77,20 @@ export default function TransactionForm({ children }: React.PropsWithChildren) {
 		},
 	})
 
-	const onSubmit = (data: FormValues) => {
-		mutate(
-			{ ...data, type },
+	const onSubmit = (payload: FormValues) => {
+		if (data?.id) {
+			update(
+				{ ...payload, id: data.id, type },
+				{
+					onSuccess: () => {
+						setOpen(false)
+					},
+				}
+			)
+			return
+		}
+		create(
+			{ ...payload, type },
 			{
 				onSuccess: () => {
 					setOpen(false)
@@ -82,6 +101,33 @@ export default function TransactionForm({ children }: React.PropsWithChildren) {
 			}
 		)
 	}
+
+	useEffect(() => {
+		if (!open && !data?.id) {
+			form.reset({
+				amount: 0,
+				remark: '',
+				date: format(new Date(), 'yyyy-MM-dd'),
+				categoryId: '',
+				walletId: '',
+			})
+		}
+	}, [open])
+
+	useEffect(() => {
+		if (data) {
+			form.reset({
+				amount: data.amount,
+				categoryId: data.categoryId,
+				date: data.date,
+				remark: data.remark || '',
+				walletId: data.walletId,
+				type: data.type,
+			})
+
+			if (data.type) setType(data.type)
+		}
+	}, [data])
 
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
@@ -107,6 +153,26 @@ export default function TransactionForm({ children }: React.PropsWithChildren) {
 								</SheetTitle>
 							</div>
 							<div className='gap-2 items-center hidden md:flex'>
+								{!!data?.id && (
+									<Button
+										type='button'
+										className='h-7 rounded font-normal text-red-500 shadow-none border-none hover:bg-muted-foreground/10 hover:text-red-800'
+										variant={'outline'}
+										onClick={() => {
+											data.id &&
+												destroy(
+													{ id: data.id },
+													{
+														onSuccess: () => {
+															setOpen(false)
+														},
+													}
+												)
+										}}
+									>
+										Delete
+									</Button>
+								)}
 								<Button type='submit' className='h-7 rounded font-normal'>
 									Save
 								</Button>
