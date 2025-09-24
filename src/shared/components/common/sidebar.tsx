@@ -6,7 +6,6 @@ import { ComponentType } from 'react'
 import Link from 'next/link'
 import {
 	IconMap,
-	IconPlus,
 	IconStack2,
 	IconWallet,
 	IconLogout,
@@ -17,7 +16,7 @@ import {
 	IconShoppingBag,
 } from '@tabler/icons-react'
 
-import WalletForm from '@/features/wallet/components/wallet-form'
+import WalletSidebar from '@/features/wallet/components/wallet-sidebar'
 import { cn } from '@/shared/lib/utils'
 
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
@@ -89,31 +88,8 @@ export function Sidebar() {
 						</PopoverContent>
 					</Popover>
 				</nav>
-				<div className='space-y-2'>
-					<div className='flex justify-between items-center'>
-						<div className='flex gap-1 items-center text-foreground/80'>
-							<IconWallet size={20} />
-							<p className='font-medium text-sm'>Wallet</p>
-						</div>
-						<WalletForm>
-							<Button
-								className='p-0 h-6 w-5 hover:bg-gray-200 rounded'
-								variant={'secondary'}
-							>
-								<IconPlus />
-							</Button>
-						</WalletForm>
-					</div>
-					<div className='space-y-3.5'>
-						<div className='flex justify-between items-center'>
-							<div className='flex gap-1 items-center'>
-								<div className='w-1.5 h-1.5 rounded-full bg-blue-500'></div>
-								<p className='text-sm text-muted-foreground'>BCA</p>
-							</div>
-							<p className='text-sm text-muted-foreground'>Rp 100.400.000</p>
-						</div>
-					</div>
-				</div>
+
+				<WalletSidebar />
 			</div>
 
 			<Popover>

@@ -29,11 +29,19 @@ import {
 } from '@/shared/components/ui/popover'
 import { defaultColorsPicker } from '@/shared/constants/color-picker'
 import { useEffect, useState } from 'react'
+import { useCreateWallet } from '../api/create-wallet'
+
+type Form = {
+	name: string
+	color: string
+}
 
 export default function WalletForm({ children }: React.PropsWithChildren) {
 	const [open, setOpen] = useState(false)
 
-	const form = useForm({
+	const { mutate } = useCreateWallet()
+
+	const form = useForm<Form>({
 		defaultValues: {
 			name: '',
 			color: '#187D86',
@@ -42,7 +50,13 @@ export default function WalletForm({ children }: React.PropsWithChildren) {
 
 	const colorWatch = form.watch('color')
 
-	const onSubmit = (data: any) => {}
+	const onSubmit = (data: Form) => {
+		mutate(data, {
+			onSuccess: () => {
+				setOpen(false)
+			},
+		})
+	}
 
 	useEffect(() => {
 		if (!open) {
@@ -101,6 +115,7 @@ export default function WalletForm({ children }: React.PropsWithChildren) {
 													const isSelected = field.value === color
 													return (
 														<button
+															type='button'
 															key={index}
 															role='radio'
 															aria-checked={isSelected}
@@ -123,7 +138,10 @@ export default function WalletForm({ children }: React.PropsWithChildren) {
 													)
 												})}
 												<Popover>
-													<PopoverTrigger className='h-[34px] w-[34px] rounded-md transition p-1 border focus:outline-none focus:ring-2 focus:ring-offset-2 ring-gray-400'>
+													<PopoverTrigger
+														type='button'
+														className='h-[34px] w-[34px] rounded-md transition p-1 border focus:outline-none focus:ring-2 focus:ring-offset-2 ring-gray-400'
+													>
 														<div
 															className='h-full w-full rounded-full flex justify-center items-center'
 															style={{

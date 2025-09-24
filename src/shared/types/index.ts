@@ -1,0 +1,20 @@
+export type Api<T> = {
+	message: string
+	success: boolean
+	data: T
+	meta?: {
+		total?: number
+		page?: number | null
+		limit?: number | null
+		pageCount?: number
+		cursor?: number | null
+		count?: number
+		hasMore?: boolean
+	}
+}
+
+export type Pagination = {
+	page?: number
+	limit?: number
+	cursor?: string
+}
