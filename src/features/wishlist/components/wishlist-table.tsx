@@ -21,6 +21,7 @@ import {
 } from '@/shared/components/ui/table'
 import { Button } from '@/shared/components/ui/button'
 import { IconDots } from '@tabler/icons-react'
+import { cn } from '@/shared/lib/utils'
 
 type Budget = {
 	name: string
@@ -141,7 +142,13 @@ export default function WishlistTable() {
 					{table.getHeaderGroups().map((headerGroup) => (
 						<TableRow key={headerGroup.id}>
 							{headerGroup.headers.map((header) => (
-								<TableHead key={header.id} className='whitespace-nowrap'>
+								<TableHead
+									key={header.id}
+									className={cn(
+										'whitespace-nowrap h-12 text-foreground/80',
+										header.index === 0 && 'pl-4',
+									)}
+								>
 									{header.isPlaceholder
 										? null
 										: flexRender(
@@ -158,7 +165,14 @@ export default function WishlistTable() {
 						table.getRowModel().rows.map((row) => (
 							<TableRow key={row.id}>
 								{row.getVisibleCells().map((cell) => (
-									<TableCell key={cell.id} className='whitespace-nowrap'>
+									<TableCell
+										key={cell.id}
+										className={cn(
+											'whitespace-nowrap',
+											cell.column.getIndex() === 0 && 'pl-4',
+											cell.column.getIndex() === 6 && 'pr-4'
+										)}
+									>
 										{flexRender(cell.column.columnDef.cell, cell.getContext())}
 									</TableCell>
 								))}

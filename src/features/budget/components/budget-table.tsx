@@ -17,6 +17,9 @@ import {
 	IconCaretUp,
 	IconCaretUpFilled,
 	IconDots,
+	IconPencil,
+	IconPlus,
+	IconTrashFilled,
 } from '@tabler/icons-react'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/components/ui/button'
@@ -61,9 +64,7 @@ const budgets: Budget[] = [
 		usage: 28,
 		start: '1 Sept',
 		end: '30 Sept',
-		categories: [
-			{ category: 'Netflix', planned: 150000, actual: 150000, progress: 100 },
-		],
+		categories: [],
 	},
 ]
 
@@ -109,18 +110,20 @@ export default function BudgetTable() {
 						<Fragment key={idx}>
 							<TableRow className='hover:bg-white'>
 								<TableCell className='w-10'>
-									<Button
-										size={'sm'}
-										className='w-6 h-6 rounded'
-										variant={'ghost'}
-										onClick={() => toggleRow(idx)}
-									>
-										{expandedRows.includes(idx) ? (
-											<IconCaretDownFilled size={16} />
-										) : (
-											<IconCaretUpFilled size={16} />
-										)}
-									</Button>
+									<div className='w-full flex justify-end'>
+										<Button
+											size={'sm'}
+											className='w-6 h-6 rounded'
+											variant={'ghost'}
+											onClick={() => toggleRow(idx)}
+										>
+											{expandedRows.includes(idx) ? (
+												<IconCaretDownFilled size={16} />
+											) : (
+												<IconCaretUpFilled size={16} />
+											)}
+										</Button>
+									</div>
 								</TableCell>
 								<TableCell className='w-[200px]'>{budget.name}</TableCell>
 								<TableCell className='w-[120px]'>{budget.start}</TableCell>
@@ -129,7 +132,16 @@ export default function BudgetTable() {
 									<ModeProvider defaultKey='view'>
 										<ModeItem keyName='view'>
 											{({ onActivate }) => (
-												<p onClick={() => onActivate('edit')}>{budget.total}</p>
+												<div className='flex gap-1 items-center justify-end transition-all ease-in group'>
+													<p>{budget.total}</p>
+													<Button
+														onClick={() => onActivate('edit')}
+														className='p-0 h-5 w-4 rounded hidden group-hover:flex'
+														variant={'ghost'}
+													>
+														<IconPencil size={14} />
+													</Button>
+												</div>
 											)}
 										</ModeItem>
 
@@ -171,40 +183,39 @@ export default function BudgetTable() {
 								</TableCell>
 							</TableRow>
 
-							{expandedRows.includes(idx) && budget.categories.length > 0 && (
+							{expandedRows.includes(idx) && (
 								<>
-									<TableRow className='border-none bg-muted/50 hover:bg-muted'>
-										<TableCell className='w-10'></TableCell>
-										<TableCell className='w-[200px] text-sm text-foreground/70'>
-											Category
-										</TableCell>
-										<TableCell className='w-[120px]'></TableCell>
-										<TableCell className='w-[120px]'></TableCell>
-										<TableCell className='w-[240px] text-right text-sm text-foreground/70'>
-											Planned
-										</TableCell>
-										<TableCell className='w-[240px] text-right text-sm text-foreground/70'>
-											Actual
-										</TableCell>
-										<TableCell className='w-[240px] text-right text-sm text-foreground/70'>
-											Remaining
-										</TableCell>
-										<TableCell className='w-[200px]'></TableCell>
-										<TableCell className='w-[80px]'></TableCell>
-									</TableRow>
+									{budget.categories.length > 0 && (
+										<TableRow className='border-none bg-muted/50 hover:bg-muted'>
+											<TableCell className='w-10'></TableCell>
+											<TableCell className='w-[200px] text-sm text-foreground/70'>
+												Category
+											</TableCell>
+											<TableCell className='w-[120px]'></TableCell>
+											<TableCell className='w-[120px]'></TableCell>
+											<TableCell className='w-[240px] text-right text-sm text-foreground/70'>
+												Planned
+											</TableCell>
+											<TableCell className='w-[240px] text-right text-sm text-foreground/70'>
+												Actual
+											</TableCell>
+											<TableCell className='w-[240px] text-right text-sm text-foreground/70'>
+												Remaining
+											</TableCell>
+											<TableCell className='w-[200px]'></TableCell>
+											<TableCell className='w-[80px]'></TableCell>
+										</TableRow>
+									)}
 
 									{budget.categories.map((cat, i) => (
 										<TableRow
 											key={i}
 											className={cn(
-												'border-transparent bg-muted/50 hover:bg-muted',
-												i === budget.categories.length - 1 && 'border-border'
+												'border-transparent bg-muted/50 hover:bg-muted'
 											)}
 										>
 											<TableCell className={cn('w-10 py-2')}></TableCell>
-											<TableCell
-												className={cn('w-[200px] flex items-center gap-2 py-2')}
-											>
+											<TableCell className={cn('w-[200px]')}>
 												{cat.category}
 											</TableCell>
 											<TableCell className={cn('w-[120px] py-2')}></TableCell>
@@ -213,7 +224,7 @@ export default function BudgetTable() {
 												<div className='flex justify-end'>
 													<Input
 														defaultValue={cat.planned}
-														className='w-24 text-right'
+														className='w-24 text-right bg-white'
 														onKeyDown={(e) => {
 															if (e.key === 'Enter') {
 																const newValue = Number(
@@ -236,9 +247,43 @@ export default function BudgetTable() {
 											<TableCell className={cn('w-[200px] py-2')}>
 												<ProgressBar progress={cat.progress} />
 											</TableCell>
-											<TableCell className={cn('w-[80px] py-2')}></TableCell>
+											<TableCell className={cn('w-[80px] py-2')}>
+												<div className='w-full flex justify-end pr-2'>
+													<Button
+														className='bg-transparent hover:bg-transparent group shadow-none border-transparent hover:border-border w-9'
+														variant={'secondary'}
+														onClick={() => alert(cat.category)}
+													>
+														<IconTrashFilled
+															className='text-[#DDDCDC] group-hover:text-red-500/80'
+															size={16}
+														/>
+													</Button>
+												</div>
+											</TableCell>
 										</TableRow>
 									))}
+									<TableRow
+										className={cn(
+											'border-transparent bg-muted/50 hover:bg-muted/50',
+											idx < budgets.length - 1 && 'border-border'
+										)}
+									>
+										<TableCell colSpan={9} className='py-0'>
+											<Button
+												size={'sm'}
+												className={cn(
+													'mb-4 gap-1 ml-10 hover:text-primary hover:bg-[#ECECEC]',
+
+													budget.categories.length === 0 && 'mt-4'
+												)}
+												variant={'ghost'}
+											>
+												<IconPlus className='!w-4 !h-4' />
+												<span className='text-sm'>New Category</span>
+											</Button>
+										</TableCell>
+									</TableRow>
 								</>
 							)}
 						</Fragment>

@@ -68,10 +68,10 @@ export function Sidebar() {
 								className={buttonVariants({
 									variant: 'secondary',
 									className:
-										'bg-transparent text-muted-foreground hover:text-primary w-full justify-start',
+										'bg-transparent text-muted-foreground hover:text-primary w-full justify-start font-normal',
 								})}
 							>
-								<IconWallet size={18} />
+								<IconWallet className='!w-[18px] !h-[18px]' />
 								Wallet
 							</Link>
 							<Link
@@ -79,10 +79,10 @@ export function Sidebar() {
 								className={buttonVariants({
 									variant: 'secondary',
 									className:
-										'bg-transparent text-muted-foreground hover:text-primary w-full justify-start',
+										'bg-transparent text-muted-foreground hover:text-primary w-full justify-start font-normal',
 								})}
 							>
-								<IconCategory size={18} />
+								<IconCategory className='!w-[18px] !h-[18px]' />
 								Category
 							</Link>
 						</PopoverContent>
