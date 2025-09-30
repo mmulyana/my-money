@@ -15,31 +15,31 @@ type Slice = {
 
 type Props = {
 	data: Slice[]
+	total?: number
 }
 
-export default function SlicedProgressBar({ data }: Props) {
-	const totalSum = data.reduce((acc, item) => acc + item.total, 0)
+export default function SlicedProgressBar({ data, total }: Props) {
+	const totalSum = total ?? data.reduce((acc, item) => acc + item.total, 0)
 
 	return (
 		<TooltipProvider>
-			<div className='flex w-full h-3 overflow-hidden'>
+			<div className='flex w-full h-3 overflow-hidden rounded-full relative bg-[#DDDCDC]'>
 				{data.map((item, index) => {
 					const widthPercent = (item.total / totalSum) * 100
-
-					let borderRadius = ''
-					if (index === 0) borderRadius = 'rounded-l-full'
-					else if (index === data.length - 1) borderRadius = 'rounded-r-full'
-					else borderRadius = 'rounded-none'
 
 					return (
 						<Tooltip key={item.id}>
 							<TooltipTrigger asChild>
 								<div
-									className={cn('h-full', borderRadius)}
+									className={cn(
+										'h-full rounded-full absolute top-0 left-0 transition-all ease-in'
+									)}
 									style={{
-										width: `${widthPercent}%`,
+										width: `calc(${widthPercent}% + 8px)`,
 										backgroundColor: item.color,
-										border: '1.5px solid white',
+										marginLeft: index === 0 ? 0 : -8,
+										zIndex: data.length - index,
+										position: 'relative',
 									}}
 								/>
 							</TooltipTrigger>
