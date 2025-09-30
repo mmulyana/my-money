@@ -11,6 +11,7 @@ const option: QueryClientConfig = {
 	defaultOptions: {
 		queries: {
 			staleTime: 10 * 60 * 1000,
+			retry: 1,
 		},
 	},
 }
