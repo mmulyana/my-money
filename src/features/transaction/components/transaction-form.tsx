@@ -196,6 +196,7 @@ export default function TransactionForm({
 													!isNaN(Number(e.target.value)) &&
 													field.onChange(Number(e.target.value))
 												}
+												inputMode='numeric'
 												autoFocus
 											/>
 										</FormItem>
