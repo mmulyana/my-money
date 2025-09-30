@@ -39,7 +39,7 @@ export default function BudgetInfo() {
 
 			<SlicedProgressBar
 				data={[
-					{ id: 1, name: 'Blue Light', color: '#3b82f6', total: 40 },
+					{ id: 1, name: 'Blue Light', color: '#3b82f6', total: 50 },
 					{ id: 2, name: 'Blue Dark', color: '#2563eb', total: 20 },
 					{ id: 3, name: 'Orange', color: '#f97316', total: 60 },
 					{ id: 4, name: 'Red', color: '#ef4444', total: 25 },
