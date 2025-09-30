@@ -1,6 +1,6 @@
 'use client'
 
-import { Check, ChevronsUpDown } from 'lucide-react'
+import { IconSelector, IconCheck as Check } from '@tabler/icons-react'
 import { useState } from 'react'
 
 import { Button } from '@/shared/components/ui/button'
@@ -33,6 +33,10 @@ interface ComboboxProps {
 	placeholder?: string
 	buttonClassName?: string
 	trigger?: React.ReactNode
+	align?: 'center' | 'end' | 'start'
+	style?: {
+		content?: string
+	}
 }
 
 export function Combobox({
@@ -44,6 +48,8 @@ export function Combobox({
 	placeholder = 'Select option...',
 	buttonClassName,
 	trigger,
+	align = 'center',
+	style,
 }: ComboboxProps) {
 	const [open, setOpen] = useState(false)
 	const [search, setSearch] = useState('')
@@ -66,11 +72,14 @@ export function Combobox({
 						{value
 							? options.find((opt) => opt.value === value)?.label
 							: placeholder}
-						<ChevronsUpDown className='opacity-50' />
+						<IconSelector className='opacity-50' />
 					</Button>
 				)}
 			</PopoverTrigger>
-			<PopoverContent className='w-[200px] p-0'>
+			<PopoverContent
+				className={cn('w-[200px] p-0', style?.content)}
+				align={align}
+			>
 				<Command>
 					<CommandInput
 						placeholder='Search...'
