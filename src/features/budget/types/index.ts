@@ -42,4 +42,5 @@ export type Categories = {
 	planned: number
 	actual: number
 	progress: number
+	id: string
 }

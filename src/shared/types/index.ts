@@ -19,4 +19,10 @@ export type Pagination = {
 	cursor?: string
 }
 
+export type ApiError = {
+	message: string
+	error: any | string
+	statusCode: number
+}
+
 export type TransactionType = 'expense' | 'income' | 'transfer'
