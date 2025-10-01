@@ -1,4 +1,5 @@
 import { Category } from '@/features/category/types'
+import { Wallet } from '@/features/wallet/types'
 
 export type budgetForm = {
 	name: string
@@ -21,20 +22,11 @@ export type Budget = {
 	startAt: string
 	endAt: string
 	total: number
-	walletId: string
-	items: BudgetItem[]
+	wallet: Wallet
+	spent: number
 	remaining: number
 	usage: number
 	categories: Categories[]
-}
-
-export type BudgetItem = {
-	id: string
-	categoryId: string
-	budgetId: string
-	planned: number
-	actual: number
-	category: Category
 }
 
 export type Categories = {
