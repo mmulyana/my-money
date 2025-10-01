@@ -94,12 +94,15 @@ export default function BudgetTable({
 						<TableHead className='h-12 w-[240px] text-right text-foreground/80'>
 							Total
 						</TableHead>
-						<TableHead className='h-12 w-[240px]'></TableHead>
+						<TableHead className='h-12 w-[240px] text-right text-foreground/80'>
+							Spent
+						</TableHead>
 						<TableHead className='h-12 w-[240px] text-right text-foreground/80'>
 							Remaining
 						</TableHead>
-						<TableHead className='h-12 min-w-[200px] text-foreground/80'>
-							Usage
+						<TableHead className='h-12 min-w-[200px] text-foreground/80'></TableHead>
+						<TableHead className='h-12 min-w-[100px] text-foreground/80 text-center'>
+							Wallet
 						</TableHead>
 						<TableHead className='h-12 w-[80px]'></TableHead>
 					</TableRow>
@@ -269,12 +272,17 @@ export default function BudgetTable({
 											</ModeItem>
 										</ModeProvider>
 									</TableCell>
-									<TableCell className='w-[240px]'></TableCell>
+									<TableCell className='w-[240px] text-right'>
+										{budget.spent}
+									</TableCell>
 									<TableCell className='w-[240px] text-right'>
 										{budget.remaining}
 									</TableCell>
 									<TableCell className='w-[200px]'>
 										<ProgressBar progress={budget.usage} />
+									</TableCell>
+									<TableCell className={cn('w-[100px] py-2 text-center')}>
+										{budget.wallet.name}
 									</TableCell>
 									<TableCell className='w-[80px]'>
 										<div className='flex justify-end pr-2'>
@@ -305,6 +313,7 @@ export default function BudgetTable({
 													Remaining
 												</TableCell>
 												<TableCell className='w-[200px]'></TableCell>
+												<TableCell className='w-[100px]'></TableCell>
 												<TableCell className='w-[80px]'></TableCell>
 											</TableRow>
 										)}
@@ -351,6 +360,7 @@ export default function BudgetTable({
 												<TableCell className={cn('w-[200px] py-2')}>
 													<ProgressBar progress={cat.progress} />
 												</TableCell>
+												<TableCell className={cn('w-[100px] py-2')}></TableCell>
 												<TableCell className={cn('w-[80px] py-2')}>
 													<div className='w-full flex justify-end pr-2'>
 														<Button
@@ -375,7 +385,7 @@ export default function BudgetTable({
 												idx < data.data.length - 1 && 'border-border'
 											)}
 										>
-											<TableCell colSpan={9} className='py-0'>
+											<TableCell colSpan={10} className='py-0'>
 												<Popover>
 													<PopoverTrigger asChild>
 														<Button
