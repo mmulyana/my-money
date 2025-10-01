@@ -1,7 +1,22 @@
 'use client'
 
 import { Fragment, useState } from 'react'
+import { format } from 'date-fns'
+import {
+	IconDots,
+	IconPlus,
+	IconPencil,
+	IconTrashFilled,
+	IconCaretUpFilled,
+	IconCaretDownFilled,
+} from '@tabler/icons-react'
+
 import ProgressBar from '@/shared/components/common/progress-bar'
+import { ModeItem, ModeProvider } from '@/shared/components/ui/mode'
+import { Calendar } from '@/shared/components/ui/calendar'
+import { Button } from '@/shared/components/ui/button'
+import { Input } from '@/shared/components/ui/input'
+import { cn } from '@/shared/lib/utils'
 import {
 	Table,
 	TableRow,
@@ -10,65 +25,29 @@ import {
 	TableHeader,
 	TableCell,
 } from '@/shared/components/ui/table'
-import { ChevronDown, ChevronRight } from 'lucide-react'
 import {
-	IconCaretDown,
-	IconCaretDownFilled,
-	IconCaretUp,
-	IconCaretUpFilled,
-	IconDots,
-	IconPencil,
-	IconPlus,
-	IconTrashFilled,
-} from '@tabler/icons-react'
-import { cn } from '@/shared/lib/utils'
-import { Button } from '@/shared/components/ui/button'
-import { Input } from '@/shared/components/ui/input'
-import { ModeItem, ModeProvider } from '@/shared/components/ui/mode'
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from '@/shared/components/ui/popover'
 
-type Category = {
-	category: string
-	planned: number
-	actual: number
-	progress: number
-}
+import { useUpdateBudget } from '../api/update-budget'
+import { useGetBudget } from '../api/get-budget'
 
-type Budget = {
-	name: string
-	total: number
-	remaining: number
-	usage: number
-	start: string
-	end: string
-	categories: Category[]
-}
+export default function BudgetTable({
+	month,
+	year,
+}: {
+	year: number
+	month: number
+}) {
+	const { mutate: update } = useUpdateBudget()
 
-const budgets: Budget[] = [
-	{
-		name: 'Monthly (September)',
-		total: 8000000,
-		remaining: 4000000,
-		usage: 28,
-		start: '1 Sept',
-		end: '30 Sept',
-		categories: [
-			{ category: 'Makan', planned: 500000, actual: 200000, progress: 28 },
-			{ category: 'Makan', planned: 500000, actual: 200000, progress: 28 },
-			{ category: 'Makan', planned: 500000, actual: 200000, progress: 28 },
-		],
-	},
-	{
-		name: 'Subscription',
-		total: 8000000,
-		remaining: 4000000,
-		usage: 28,
-		start: '1 Sept',
-		end: '30 Sept',
-		categories: [],
-	},
-]
+	const { data } = useGetBudget({
+		month,
+		year,
+	})
 
-export default function BudgetTable() {
 	const [expandedRows, setExpandedRows] = useState<number[]>([0])
 
 	const toggleRow = (index: number) => {
@@ -106,7 +85,7 @@ export default function BudgetTable() {
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{budgets.map((budget, idx) => (
+					{data?.data?.map((budget, idx) => (
 						<Fragment key={idx}>
 							<TableRow className='hover:bg-white'>
 								<TableCell className='w-10'>
@@ -125,9 +104,104 @@ export default function BudgetTable() {
 										</Button>
 									</div>
 								</TableCell>
-								<TableCell className='w-[200px]'>{budget.name}</TableCell>
-								<TableCell className='w-[120px]'>{budget.start}</TableCell>
-								<TableCell className='w-[120px]'>{budget.end}</TableCell>
+								<TableCell className='w-[200px]'>
+									<ModeProvider defaultKey='view'>
+										<ModeItem keyName='view'>
+											{({ onActivate }) => (
+												<div className='flex gap-1 items-center transition-all ease-in group w-[200px]'>
+													<p>{budget.name}</p>
+													<Button
+														onClick={() => onActivate('edit')}
+														className='p-0 h-5 w-4 rounded hidden group-hover:flex'
+														variant={'ghost'}
+													>
+														<IconPencil size={14} />
+													</Button>
+												</div>
+											)}
+										</ModeItem>
+
+										<ModeItem keyName='edit'>
+											{({ onActivate }) => (
+												<div className='flex gap-1 items-center transition-all ease-in group w-[200px]'>
+													<Input
+														defaultValue={budget.name}
+														className='w-full h-fit py-0.5 px-1 border-x-0 rounded border-transparent border bg-muted'
+														autoFocus
+														onKeyDown={(e) => {
+															if (e.key === 'Enter') {
+																const newValue = (e.target as HTMLInputElement)
+																	.value
+																update(
+																	{
+																		id: budget.id,
+																		name: newValue,
+																	},
+																	{
+																		onSuccess: () => {
+																			onActivate('view')
+																		},
+																	}
+																)
+															}
+														}}
+														onBlur={() => onActivate('view')}
+													/>
+												</div>
+											)}
+										</ModeItem>
+									</ModeProvider>
+								</TableCell>
+								<TableCell className='w-[120px]'>
+									<Popover>
+										<PopoverTrigger asChild>
+											<div className='flex gap-1 items-center transition-all ease-in group w-[120px]'>
+												<p>{format(new Date(budget.startAt), 'dd MMM')}</p>
+												<Button
+													className='p-0 h-5 w-4 rounded hidden group-hover:flex'
+													variant={'ghost'}
+												>
+													<IconPencil size={14} />
+												</Button>
+											</div>
+										</PopoverTrigger>
+										<PopoverContent className='p-1 w-fit'>
+											<Calendar
+												selected={new Date(budget.startAt)}
+												captionLayout='dropdown'
+												mode='single'
+												onSelect={(date) => {
+													update({ id: budget.id, startAt: date?.toString() })
+												}}
+											/>
+										</PopoverContent>
+									</Popover>
+								</TableCell>
+								<TableCell className='w-[120px]'>
+									<Popover>
+										<PopoverTrigger asChild>
+											<div className='flex gap-1 items-center transition-all ease-in group w-[120px]'>
+												<p>{format(new Date(budget.endAt), 'dd MMM')}</p>
+												<Button
+													className='p-0 h-5 w-4 rounded hidden group-hover:flex'
+													variant={'ghost'}
+												>
+													<IconPencil size={14} />
+												</Button>
+											</div>
+										</PopoverTrigger>
+										<PopoverContent className='p-1 w-fit'>
+											<Calendar
+												selected={new Date(budget.endAt)}
+												captionLayout='dropdown'
+												mode='single'
+												onSelect={(date) => {
+													update({ id: budget.id, endAt: date?.toString() })
+												}}
+											/>
+										</PopoverContent>
+									</Popover>
+								</TableCell>
 								<TableCell className='w-[240px] text-right'>
 									<ModeProvider defaultKey='view'>
 										<ModeItem keyName='view'>
@@ -156,8 +230,13 @@ export default function BudgetTable() {
 															const newValue = Number(
 																(e.target as HTMLInputElement).value
 															)
-															alert(
-																`New planned value for ${budget.name}: ${newValue}`
+															update(
+																{ id: budget.id, total: newValue },
+																{
+																	onSuccess: () => {
+																		onActivate('view')
+																	},
+																}
 															)
 														}
 													}}
@@ -216,7 +295,7 @@ export default function BudgetTable() {
 										>
 											<TableCell className={cn('w-10 py-2')}></TableCell>
 											<TableCell className={cn('w-[200px]')}>
-												{cat.category}
+												{cat.category.name}
 											</TableCell>
 											<TableCell className={cn('w-[120px] py-2')}></TableCell>
 											<TableCell className={cn('w-[120px] py-2')}></TableCell>
@@ -266,7 +345,7 @@ export default function BudgetTable() {
 									<TableRow
 										className={cn(
 											'border-transparent bg-muted/50 hover:bg-muted/50',
-											idx < budgets.length - 1 && 'border-border'
+											idx < data.data.length - 1 && 'border-border'
 										)}
 									>
 										<TableCell colSpan={9} className='py-0'>
