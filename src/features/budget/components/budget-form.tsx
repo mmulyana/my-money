@@ -53,10 +53,10 @@ import {
 
 import { useGetCategories } from '@/features/category/api/get-category'
 import { useGetWallet } from '@/features/wallet/api/get-wallet'
-import { Category } from '@/features/category/types'
 
 import { useCreateBudget } from '../api/create-budget'
 import { budgetForm } from '../types'
+import { flatten } from '../utils'
 
 export default function BudgetForm({ children }: React.PropsWithChildren) {
 	const [onFocus, setFocus] = useState(false)
@@ -97,16 +97,6 @@ export default function BudgetForm({ children }: React.PropsWithChildren) {
 		(acc, prev) => (acc = acc + Number(prev.planned)),
 		0
 	)
-
-	function flatten(items: Category[], acc: Category[] = []): Category[] {
-		for (const item of items) {
-			acc.push(item)
-			if (item.children) {
-				flatten(item.children, acc)
-			}
-		}
-		return acc
-	}
 
 	const flatCategories = flatten(categories?.data || [])
 
