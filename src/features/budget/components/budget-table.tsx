@@ -9,6 +9,7 @@ import {
 	IconTrashFilled,
 	IconCaretUpFilled,
 	IconCaretDownFilled,
+	IconCheck,
 } from '@tabler/icons-react'
 
 import ProgressBar from '@/shared/components/common/progress-bar'
@@ -33,6 +34,19 @@ import {
 
 import { useUpdateBudget } from '../api/update-budget'
 import { useGetBudget } from '../api/get-budget'
+import { useUpdateBudgetItem } from '../api/update-budget-item'
+import {
+	Command,
+	CommandEmpty,
+	CommandGroup,
+	CommandInput,
+	CommandItem,
+	CommandList,
+} from '@/shared/components/ui/command'
+import { useGetCategories } from '@/features/category/api/get-category'
+import { flatten } from '../utils'
+import { useCreateBudgetItem } from '../api/create-budget-item'
+import { useDeleteBudgetItem } from '../api/delete-budget-item'
 
 export default function BudgetTable({
 	month,
@@ -42,6 +56,9 @@ export default function BudgetTable({
 	month: number
 }) {
 	const { mutate: update } = useUpdateBudget()
+	const { mutate: updateItem } = useUpdateBudgetItem()
+	const { mutate: createItem } = useCreateBudgetItem()
+	const { mutate: deleteItem } = useDeleteBudgetItem()
 
 	const { data } = useGetBudget({
 		month,
@@ -55,6 +72,9 @@ export default function BudgetTable({
 			prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
 		)
 	}
+
+	const { data: categories } = useGetCategories({ type: 'expense' })
+	const flatCategories = flatten(categories?.data || [])
 
 	return (
 		<div className='rounded-lg bg-white border overflow-hidden'>
@@ -85,58 +105,156 @@ export default function BudgetTable({
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{data?.data?.map((budget, idx) => (
-						<Fragment key={idx}>
-							<TableRow className='hover:bg-white'>
-								<TableCell className='w-10'>
-									<div className='w-full flex justify-end'>
-										<Button
-											size={'sm'}
-											className='w-6 h-6 rounded'
-											variant={'ghost'}
-											onClick={() => toggleRow(idx)}
-										>
-											{expandedRows.includes(idx) ? (
-												<IconCaretDownFilled size={16} />
-											) : (
-												<IconCaretUpFilled size={16} />
-											)}
-										</Button>
-									</div>
-								</TableCell>
-								<TableCell className='w-[200px]'>
-									<ModeProvider defaultKey='view'>
-										<ModeItem keyName='view'>
-											{({ onActivate }) => (
-												<div className='flex gap-1 items-center transition-all ease-in group w-[200px]'>
-													<p>{budget.name}</p>
+					{data?.data?.map((budget, idx) => {
+						let selectedCategories = budget.categories.map((i) => i.category.id)
+						return (
+							<Fragment key={idx}>
+								<TableRow className='hover:bg-white'>
+									<TableCell className='w-10'>
+										<div className='w-full flex justify-end'>
+											<Button
+												size={'sm'}
+												className='w-6 h-6 rounded'
+												variant={'ghost'}
+												onClick={() => toggleRow(idx)}
+											>
+												{expandedRows.includes(idx) ? (
+													<IconCaretDownFilled size={16} />
+												) : (
+													<IconCaretUpFilled size={16} />
+												)}
+											</Button>
+										</div>
+									</TableCell>
+									<TableCell className='w-[200px]'>
+										<ModeProvider defaultKey='view'>
+											<ModeItem keyName='view'>
+												{({ onActivate }) => (
+													<div className='flex gap-1 items-center transition-all ease-in group w-[200px]'>
+														<p>{budget.name}</p>
+														<Button
+															onClick={() => onActivate('edit')}
+															className='p-0 h-5 w-4 rounded hidden group-hover:flex'
+															variant={'ghost'}
+														>
+															<IconPencil size={14} />
+														</Button>
+													</div>
+												)}
+											</ModeItem>
+
+											<ModeItem keyName='edit'>
+												{({ onActivate }) => (
+													<div className='flex gap-1 items-center transition-all ease-in group w-[200px]'>
+														<Input
+															defaultValue={budget.name}
+															className='w-full h-fit py-0.5 px-1 border-x-0 rounded border-transparent border bg-muted'
+															autoFocus
+															onKeyDown={(e) => {
+																if (e.key === 'Enter') {
+																	const newValue = (
+																		e.target as HTMLInputElement
+																	).value
+																	update(
+																		{
+																			id: budget.id,
+																			name: newValue,
+																		},
+																		{
+																			onSuccess: () => {
+																				onActivate('view')
+																			},
+																		}
+																	)
+																}
+															}}
+															onBlur={() => onActivate('view')}
+														/>
+													</div>
+												)}
+											</ModeItem>
+										</ModeProvider>
+									</TableCell>
+									<TableCell className='w-[120px]'>
+										<Popover>
+											<PopoverTrigger asChild>
+												<div className='flex gap-1 items-center transition-all ease-in group w-[120px]'>
+													<p>{format(new Date(budget.startAt), 'dd MMM')}</p>
 													<Button
-														onClick={() => onActivate('edit')}
 														className='p-0 h-5 w-4 rounded hidden group-hover:flex'
 														variant={'ghost'}
 													>
 														<IconPencil size={14} />
 													</Button>
 												</div>
-											)}
-										</ModeItem>
+											</PopoverTrigger>
+											<PopoverContent className='p-1 w-fit'>
+												<Calendar
+													selected={new Date(budget.startAt)}
+													captionLayout='dropdown'
+													mode='single'
+													onSelect={(date) => {
+														update({ id: budget.id, startAt: date?.toString() })
+													}}
+												/>
+											</PopoverContent>
+										</Popover>
+									</TableCell>
+									<TableCell className='w-[120px]'>
+										<Popover>
+											<PopoverTrigger asChild>
+												<div className='flex gap-1 items-center transition-all ease-in group w-[120px]'>
+													<p>{format(new Date(budget.endAt), 'dd MMM')}</p>
+													<Button
+														className='p-0 h-5 w-4 rounded hidden group-hover:flex'
+														variant={'ghost'}
+													>
+														<IconPencil size={14} />
+													</Button>
+												</div>
+											</PopoverTrigger>
+											<PopoverContent className='p-1 w-fit'>
+												<Calendar
+													selected={new Date(budget.endAt)}
+													captionLayout='dropdown'
+													mode='single'
+													onSelect={(date) => {
+														update({ id: budget.id, endAt: date?.toString() })
+													}}
+												/>
+											</PopoverContent>
+										</Popover>
+									</TableCell>
+									<TableCell className='w-[240px] text-right'>
+										<ModeProvider defaultKey='view'>
+											<ModeItem keyName='view'>
+												{({ onActivate }) => (
+													<div className='flex gap-1 items-center justify-end transition-all ease-in group'>
+														<p>{budget.total}</p>
+														<Button
+															onClick={() => onActivate('edit')}
+															className='p-0 h-5 w-4 rounded hidden group-hover:flex'
+															variant={'ghost'}
+														>
+															<IconPencil size={14} />
+														</Button>
+													</div>
+												)}
+											</ModeItem>
 
-										<ModeItem keyName='edit'>
-											{({ onActivate }) => (
-												<div className='flex gap-1 items-center transition-all ease-in group w-[200px]'>
+											<ModeItem keyName='edit'>
+												{({ onActivate }) => (
 													<Input
-														defaultValue={budget.name}
-														className='w-full h-fit py-0.5 px-1 border-x-0 rounded border-transparent border bg-muted'
+														defaultValue={budget.total}
+														className='w-24 text-right h-fit py-0.5 border-x-0 rounded border-transparent border bg-muted'
 														autoFocus
 														onKeyDown={(e) => {
 															if (e.key === 'Enter') {
-																const newValue = (e.target as HTMLInputElement)
-																	.value
+																const newValue = Number(
+																	(e.target as HTMLInputElement).value
+																)
 																update(
-																	{
-																		id: budget.id,
-																		name: newValue,
-																	},
+																	{ id: budget.id, total: newValue },
 																	{
 																		onSuccess: () => {
 																			onActivate('view')
@@ -147,226 +265,176 @@ export default function BudgetTable({
 														}}
 														onBlur={() => onActivate('view')}
 													/>
-												</div>
-											)}
-										</ModeItem>
-									</ModeProvider>
-								</TableCell>
-								<TableCell className='w-[120px]'>
-									<Popover>
-										<PopoverTrigger asChild>
-											<div className='flex gap-1 items-center transition-all ease-in group w-[120px]'>
-												<p>{format(new Date(budget.startAt), 'dd MMM')}</p>
-												<Button
-													className='p-0 h-5 w-4 rounded hidden group-hover:flex'
-													variant={'ghost'}
-												>
-													<IconPencil size={14} />
-												</Button>
-											</div>
-										</PopoverTrigger>
-										<PopoverContent className='p-1 w-fit'>
-											<Calendar
-												selected={new Date(budget.startAt)}
-												captionLayout='dropdown'
-												mode='single'
-												onSelect={(date) => {
-													update({ id: budget.id, startAt: date?.toString() })
-												}}
-											/>
-										</PopoverContent>
-									</Popover>
-								</TableCell>
-								<TableCell className='w-[120px]'>
-									<Popover>
-										<PopoverTrigger asChild>
-											<div className='flex gap-1 items-center transition-all ease-in group w-[120px]'>
-												<p>{format(new Date(budget.endAt), 'dd MMM')}</p>
-												<Button
-													className='p-0 h-5 w-4 rounded hidden group-hover:flex'
-													variant={'ghost'}
-												>
-													<IconPencil size={14} />
-												</Button>
-											</div>
-										</PopoverTrigger>
-										<PopoverContent className='p-1 w-fit'>
-											<Calendar
-												selected={new Date(budget.endAt)}
-												captionLayout='dropdown'
-												mode='single'
-												onSelect={(date) => {
-													update({ id: budget.id, endAt: date?.toString() })
-												}}
-											/>
-										</PopoverContent>
-									</Popover>
-								</TableCell>
-								<TableCell className='w-[240px] text-right'>
-									<ModeProvider defaultKey='view'>
-										<ModeItem keyName='view'>
-											{({ onActivate }) => (
-												<div className='flex gap-1 items-center justify-end transition-all ease-in group'>
-													<p>{budget.total}</p>
-													<Button
-														onClick={() => onActivate('edit')}
-														className='p-0 h-5 w-4 rounded hidden group-hover:flex'
-														variant={'ghost'}
-													>
-														<IconPencil size={14} />
-													</Button>
-												</div>
-											)}
-										</ModeItem>
+												)}
+											</ModeItem>
+										</ModeProvider>
+									</TableCell>
+									<TableCell className='w-[240px]'></TableCell>
+									<TableCell className='w-[240px] text-right'>
+										{budget.remaining}
+									</TableCell>
+									<TableCell className='w-[200px]'>
+										<ProgressBar progress={budget.usage} />
+									</TableCell>
+									<TableCell className='w-[80px]'>
+										<div className='flex justify-end pr-2'>
+											<Button variant={'ghost'} size={'sm'}>
+												<IconDots size={18} />
+											</Button>
+										</div>
+									</TableCell>
+								</TableRow>
 
-										<ModeItem keyName='edit'>
-											{({ onActivate }) => (
-												<Input
-													defaultValue={budget.total}
-													className='w-24 text-right h-fit py-0.5 border-x-0 rounded border-transparent border bg-muted'
-													autoFocus
-													onKeyDown={(e) => {
-														if (e.key === 'Enter') {
-															const newValue = Number(
-																(e.target as HTMLInputElement).value
-															)
-															update(
-																{ id: budget.id, total: newValue },
-																{
-																	onSuccess: () => {
-																		onActivate('view')
-																	},
+								{expandedRows.includes(idx) && (
+									<>
+										{budget.categories.length > 0 && (
+											<TableRow className='border-none bg-muted/50 hover:bg-muted'>
+												<TableCell className='w-10'></TableCell>
+												<TableCell className='w-[200px] text-sm text-foreground/70'>
+													Category
+												</TableCell>
+												<TableCell className='w-[120px]'></TableCell>
+												<TableCell className='w-[120px]'></TableCell>
+												<TableCell className='w-[240px] text-right text-sm text-foreground/70'>
+													Planned
+												</TableCell>
+												<TableCell className='w-[240px] text-right text-sm text-foreground/70'>
+													Actual
+												</TableCell>
+												<TableCell className='w-[240px] text-right text-sm text-foreground/70'>
+													Remaining
+												</TableCell>
+												<TableCell className='w-[200px]'></TableCell>
+												<TableCell className='w-[80px]'></TableCell>
+											</TableRow>
+										)}
+
+										{budget.categories.map((cat, i) => (
+											<TableRow
+												key={i}
+												className={cn(
+													'border-transparent bg-muted/50 hover:bg-muted'
+												)}
+											>
+												<TableCell className={cn('w-10 py-2')}></TableCell>
+												<TableCell className={cn('w-[200px]')}>
+													{cat.category.name}
+												</TableCell>
+												<TableCell className={cn('w-[120px] py-2')}></TableCell>
+												<TableCell className={cn('w-[120px] py-2')}></TableCell>
+												<TableCell className={cn('w-[240px] py-2')}>
+													<div className='flex justify-end'>
+														<Input
+															defaultValue={cat.planned}
+															className='w-24 text-right bg-white'
+															onKeyDown={(e) => {
+																if (e.key === 'Enter') {
+																	const newValue = Number(
+																		(e.target as HTMLInputElement).value
+																	)
+																	updateItem({
+																		id: cat.id,
+																		planned: newValue,
+																		categoryId: cat.category.id,
+																	})
 																}
-															)
-														}
-													}}
-													onBlur={() => onActivate('view')}
-												/>
-											)}
-										</ModeItem>
-									</ModeProvider>
-								</TableCell>
-								<TableCell className='w-[240px]'></TableCell>
-								<TableCell className='w-[240px] text-right'>
-									{budget.remaining}
-								</TableCell>
-								<TableCell className='w-[200px]'>
-									<ProgressBar progress={budget.usage} />
-								</TableCell>
-								<TableCell className='w-[80px]'>
-									<div className='flex justify-end pr-2'>
-										<Button variant={'ghost'} size={'sm'}>
-											<IconDots size={18} />
-										</Button>
-									</div>
-								</TableCell>
-							</TableRow>
-
-							{expandedRows.includes(idx) && (
-								<>
-									{budget.categories.length > 0 && (
-										<TableRow className='border-none bg-muted/50 hover:bg-muted'>
-											<TableCell className='w-10'></TableCell>
-											<TableCell className='w-[200px] text-sm text-foreground/70'>
-												Category
-											</TableCell>
-											<TableCell className='w-[120px]'></TableCell>
-											<TableCell className='w-[120px]'></TableCell>
-											<TableCell className='w-[240px] text-right text-sm text-foreground/70'>
-												Planned
-											</TableCell>
-											<TableCell className='w-[240px] text-right text-sm text-foreground/70'>
-												Actual
-											</TableCell>
-											<TableCell className='w-[240px] text-right text-sm text-foreground/70'>
-												Remaining
-											</TableCell>
-											<TableCell className='w-[200px]'></TableCell>
-											<TableCell className='w-[80px]'></TableCell>
-										</TableRow>
-									)}
-
-									{budget.categories.map((cat, i) => (
+															}}
+														/>
+													</div>
+												</TableCell>
+												<TableCell className={cn('w-[240px] py-2 text-right')}>
+													{cat.actual}
+												</TableCell>
+												<TableCell className={cn('w-[240px] py-2 text-right')}>
+													{cat.planned - cat.actual}
+												</TableCell>
+												<TableCell className={cn('w-[200px] py-2')}>
+													<ProgressBar progress={cat.progress} />
+												</TableCell>
+												<TableCell className={cn('w-[80px] py-2')}>
+													<div className='w-full flex justify-end pr-2'>
+														<Button
+															className='bg-transparent hover:bg-transparent group shadow-none border-transparent hover:border-border w-9'
+															variant={'secondary'}
+															onClick={() => {
+																deleteItem({ id: cat.id })
+															}}
+														>
+															<IconTrashFilled
+																className='text-[#DDDCDC] group-hover:text-red-500/80'
+																size={16}
+															/>
+														</Button>
+													</div>
+												</TableCell>
+											</TableRow>
+										))}
 										<TableRow
-											key={i}
 											className={cn(
-												'border-transparent bg-muted/50 hover:bg-muted'
+												'border-transparent bg-muted/50 hover:bg-muted/50',
+												idx < data.data.length - 1 && 'border-border'
 											)}
 										>
-											<TableCell className={cn('w-10 py-2')}></TableCell>
-											<TableCell className={cn('w-[200px]')}>
-												{cat.category.name}
-											</TableCell>
-											<TableCell className={cn('w-[120px] py-2')}></TableCell>
-											<TableCell className={cn('w-[120px] py-2')}></TableCell>
-											<TableCell className={cn('w-[240px] py-2')}>
-												<div className='flex justify-end'>
-													<Input
-														defaultValue={cat.planned}
-														className='w-24 text-right bg-white'
-														onKeyDown={(e) => {
-															if (e.key === 'Enter') {
-																const newValue = Number(
-																	(e.target as HTMLInputElement).value
-																)
-																alert(
-																	`New planned value for ${cat.category}: ${newValue}`
-																)
-															}
-														}}
-													/>
-												</div>
-											</TableCell>
-											<TableCell className={cn('w-[240px] py-2 text-right')}>
-												{cat.actual}
-											</TableCell>
-											<TableCell className={cn('w-[240px] py-2 text-right')}>
-												{cat.planned - cat.actual}
-											</TableCell>
-											<TableCell className={cn('w-[200px] py-2')}>
-												<ProgressBar progress={cat.progress} />
-											</TableCell>
-											<TableCell className={cn('w-[80px] py-2')}>
-												<div className='w-full flex justify-end pr-2'>
-													<Button
-														className='bg-transparent hover:bg-transparent group shadow-none border-transparent hover:border-border w-9'
-														variant={'secondary'}
-														onClick={() => alert(cat.category)}
-													>
-														<IconTrashFilled
-															className='text-[#DDDCDC] group-hover:text-red-500/80'
-															size={16}
-														/>
-													</Button>
-												</div>
+											<TableCell colSpan={9} className='py-0'>
+												<Popover>
+													<PopoverTrigger asChild>
+														<Button
+															size={'sm'}
+															className={cn(
+																'mb-4 gap-1 ml-10 hover:text-primary hover:bg-[#ECECEC]',
+
+																budget.categories.length === 0 && 'mt-4'
+															)}
+															variant={'ghost'}
+														>
+															<IconPlus className='!w-4 !h-4' />
+															<span className='text-sm'>New Category</span>
+														</Button>
+													</PopoverTrigger>
+													<PopoverContent className='!w-[--radix-popover-trigger-width] p-0'>
+														<Command>
+															<CommandInput
+																placeholder='Search'
+																className='h-9'
+															/>
+
+															<CommandList>
+																<CommandEmpty>No found.</CommandEmpty>
+																<CommandGroup>
+																	{flatCategories.map((i) => (
+																		<CommandItem
+																			key={i.id}
+																			value={i.id + i.name}
+																			className={cn(
+																				'flex justify-between items-center',
+																				i.parentId && 'ml-4 text-foreground/80'
+																			)}
+																			onSelect={() => {
+																				createItem({
+																					categoryId: i.id,
+																					budgetId: budget.id,
+																					planned: 0,
+																				})
+																			}}
+																		>
+																			{i.name}
+																			{selectedCategories.includes(i.id) && (
+																				<IconCheck />
+																			)}
+																		</CommandItem>
+																	))}
+																</CommandGroup>
+															</CommandList>
+														</Command>
+													</PopoverContent>
+												</Popover>
 											</TableCell>
 										</TableRow>
-									))}
-									<TableRow
-										className={cn(
-											'border-transparent bg-muted/50 hover:bg-muted/50',
-											idx < data.data.length - 1 && 'border-border'
-										)}
-									>
-										<TableCell colSpan={9} className='py-0'>
-											<Button
-												size={'sm'}
-												className={cn(
-													'mb-4 gap-1 ml-10 hover:text-primary hover:bg-[#ECECEC]',
-
-													budget.categories.length === 0 && 'mt-4'
-												)}
-												variant={'ghost'}
-											>
-												<IconPlus className='!w-4 !h-4' />
-												<span className='text-sm'>New Category</span>
-											</Button>
-										</TableCell>
-									</TableRow>
-								</>
-							)}
-						</Fragment>
-					))}
+									</>
+								)}
+							</Fragment>
+						)
+					})}
 				</TableBody>
 			</Table>
 		</div>
