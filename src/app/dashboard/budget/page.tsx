@@ -12,7 +12,7 @@ import useCalendarMonth from '@/shared/hooks/use-calendar-month'
 import { Button } from '@/shared/components/ui/button'
 
 export default function Page() {
-	const { month, next, prev } = useCalendarMonth()
+	const { month, next, prev, monthIndex, year } = useCalendarMonth()
 
 	return (
 		<div className='space-y-4 w-full'>
@@ -50,7 +50,7 @@ export default function Page() {
 					</BudgetForm>
 				</div>
 			</div>
-			<BudgetTable />
+			<BudgetTable month={monthIndex} year={year} />
 		</div>
 	)
 }
