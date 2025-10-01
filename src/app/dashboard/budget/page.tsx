@@ -20,9 +20,9 @@ export default function Page() {
 				<div className='flex gap-1 items-center'>
 					<button
 						onClick={prev}
-						className='w-5 h-5 cursor-pointer hover:bg-white p-0 justify-center flex items-center rounded'
+						className='w-8 h-8 cursor-pointer hover:bg-white p-0 justify-center flex items-center rounded-md'
 					>
-						<IconChevronLeft size={16} />
+						<IconChevronLeft size={16} strokeWidth={2.5}/>
 					</button>
 					<div className='flex gap-2 items-center w-28 justify-center'>
 						<p className='text-sm text-foreground'>{month}</p>
@@ -33,9 +33,9 @@ export default function Page() {
 					</div>
 					<button
 						onClick={next}
-						className='w-5 h-5 cursor-pointer hover:bg-white p-0 justify-center flex items-center rounded'
+						className='w-8 h-8 cursor-pointer hover:bg-white p-0 justify-center flex items-center rounded-md'
 					>
-						<IconChevronRight size={16} />
+						<IconChevronRight size={16} strokeWidth={2.5}/>
 					</button>
 				</div>
 				<div className='flex gap-2 items-center'>
