@@ -1,5 +1,29 @@
+import {
+	IconPlus,
+	IconCheck,
+	IconMinus,
+	IconWallet,
+	IconSelector,
+	IconTrashFilled,
+	IconChevronLeft,
+	IconChevronRight,
+	IconCategoryPlus,
+} from '@tabler/icons-react'
 import { useFieldArray, useForm } from 'react-hook-form'
+import { AnimatedCounter } from 'react-animated-counter'
+import { Close } from '@radix-ui/react-dialog'
+import { CalendarIcon } from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { format } from 'date-fns'
 
+import SlicedProgressBar from '@/shared/components/common/sliced-progress-bar'
+import ButtonClose from '@/shared/components/common/button-close'
+import { Sheet, SheetContent, SheetTrigger } from '@/shared/components/ui/sheet'
+import { Button, buttonVariants } from '@/shared/components/ui/button'
+import { Combobox } from '@/shared/components/common/combobox'
+import { Calendar } from '@/shared/components/ui/calendar'
+import { Input } from '@/shared/components/ui/input'
+import { cn } from '@/shared/lib/utils'
 import {
 	MultiStep,
 	MultiStepContent,
@@ -7,42 +31,17 @@ import {
 	MultiStepPrev,
 	MultiStepProgress,
 } from '@/shared/components/ui/multi-step'
-import { Sheet, SheetContent, SheetTrigger } from '@/shared/components/ui/sheet'
-
-import { budgetForm } from '../types'
-import { Close } from '@radix-ui/react-dialog'
-import ButtonClose from '@/shared/components/common/button-close'
 import {
 	Form,
 	FormField,
 	FormItem,
 	FormLabel,
 } from '@/shared/components/ui/form'
-import { Input } from '@/shared/components/ui/input'
-import { useGetWallet } from '@/features/wallet/api/get-wallet'
-import { Fragment, useMemo, useState } from 'react'
-import { Combobox } from '@/shared/components/common/combobox'
-import { Button, buttonVariants } from '@/shared/components/ui/button'
-import {
-	IconCategoryPlus,
-	IconChevronLeft,
-	IconChevronRight,
-	IconMinus,
-	IconPlus,
-	IconSelector,
-	IconTrashFilled,
-	IconWallet,
-} from '@tabler/icons-react'
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
 } from '@/shared/components/ui/popover'
-import { format } from 'date-fns'
-import { Calendar } from '@/shared/components/ui/calendar'
-import { CalendarIcon } from 'lucide-react'
-import { AnimatedCounter } from 'react-animated-counter'
-import SlicedProgressBar from '@/shared/components/common/sliced-progress-bar'
 import {
 	Command,
 	CommandEmpty,
@@ -51,42 +50,22 @@ import {
 	CommandItem,
 	CommandList,
 } from '@/shared/components/ui/command'
-import { cn } from '@/shared/lib/utils'
 
-type Category = {
-	value: string
-	label: string
-	color: string
-	parentId: null | string
-	children?: Category[]
-}
+import { useGetCategories } from '@/features/category/api/get-category'
+import { useGetWallet } from '@/features/wallet/api/get-wallet'
+import { Category } from '@/features/category/types'
 
-const categories: Category[] = [
-	{
-		value: '1',
-		label: 'Makan',
-		color: '#3b82f6',
-		parentId: null,
-		children: [
-			{
-				value: '2',
-				label: 'Nasi Padang',
-				parentId: '1',
-				color: '#f97316',
-			},
-		],
-	},
-	{
-		value: '3',
-		label: 'Minum',
-		parentId: null,
-		color: '#2563eb',
-	},
-]
+import { useCreateBudget } from '../api/create-budget'
+import { budgetForm } from '../types'
 
 export default function BudgetForm({ children }: React.PropsWithChildren) {
-	const { data: wallets } = useGetWallet({})
 	const [onFocus, setFocus] = useState(false)
+	const [open, setOpen] = useState(false)
+
+	const { data: categories } = useGetCategories({ type: 'expense' })
+	const { data: wallets } = useGetWallet({})
+
+	const { mutate } = useCreateBudget()
 
 	const walletOptions = useMemo(() => {
 		return wallets?.data?.map((i) => ({
@@ -99,8 +78,8 @@ export default function BudgetForm({ children }: React.PropsWithChildren) {
 		defaultValues: {
 			name: '',
 			categories: [],
-			endDate: '',
-			startDate: '',
+			endAt: '',
+			startAt: '',
 			total: 0,
 			walletId: '',
 		},
@@ -113,9 +92,9 @@ export default function BudgetForm({ children }: React.PropsWithChildren) {
 
 	const { total, categories: categoryWatch } = form.watch()
 
-	const selectedCategory = categoryWatch.map((i) => i.category_id)
+	const selectedCategory = categoryWatch.map((i) => i.categoryId)
 	const totalCategory = categoryWatch.reduce(
-		(acc, prev) => (acc = acc + Number(prev.total)),
+		(acc, prev) => (acc = acc + Number(prev.planned)),
 		0
 	)
 
@@ -129,10 +108,22 @@ export default function BudgetForm({ children }: React.PropsWithChildren) {
 		return acc
 	}
 
-	const flatCategories = flatten(categories)
+	const flatCategories = flatten(categories?.data || [])
+
+	const onSubmit = () => {
+		const data = form.getValues()
+		mutate(data, {
+			onSuccess: () => {
+				setOpen(false)
+			},
+			onError: (err) => {
+				console.log(err)
+			},
+		})
+	}
 
 	return (
-		<Sheet>
+		<Sheet open={open} onOpenChange={setOpen}>
 			<SheetTrigger asChild>{children}</SheetTrigger>
 			<SheetContent hideClose className='p-4 bg-background'>
 				<Form {...form}>
@@ -202,7 +193,7 @@ export default function BudgetForm({ children }: React.PropsWithChildren) {
 										/>
 										<FormField
 											control={form.control}
-											name='startDate'
+											name='startAt'
 											render={({ field }) => (
 												<FormItem className='flex justify-between items-center p-2 border-b '>
 													<div className='flex gap-1.5 items-center'>
@@ -242,7 +233,7 @@ export default function BudgetForm({ children }: React.PropsWithChildren) {
 										/>
 										<FormField
 											control={form.control}
-											name='endDate'
+											name='endAt'
 											render={({ field }) => (
 												<FormItem className='flex justify-between items-center p-2'>
 													<div className='flex gap-1.5 items-center'>
@@ -362,10 +353,10 @@ export default function BudgetForm({ children }: React.PropsWithChildren) {
 									<div className='space-y-2'>
 										<SlicedProgressBar
 											data={categoryWatch.map((i) => ({
-												id: i.category_id,
+												id: i.categoryId,
 												color: i.color,
-												name: i.label,
-												total: i.total,
+												name: i.name,
+												total: i.planned,
 											}))}
 											total={total}
 										/>
@@ -396,12 +387,12 @@ export default function BudgetForm({ children }: React.PropsWithChildren) {
 													key={item.id}
 												>
 													<div>
-														<p>{item.label}</p>
+														<p>{item.name}</p>
 													</div>
 													<div className='flex gap-1 items-center'>
 														<FormField
 															control={form.control}
-															name={`categories.${index}.total`}
+															name={`categories.${index}.planned`}
 															render={({ field }) => (
 																<Input
 																	{...field}
@@ -441,29 +432,30 @@ export default function BudgetForm({ children }: React.PropsWithChildren) {
 													<CommandList>
 														<CommandEmpty>No found.</CommandEmpty>
 														<CommandGroup>
-															{flatCategories
-																.filter(
-																	(i) => !selectedCategory.includes(i.value)
-																)
-																.map((i) => (
-																	<CommandItem
-																		key={i.value}
-																		value={i.label}
-																		className={cn(
-																			i.parentId && 'text-red-500 border ml-10'
-																		)}
-																		onSelect={() =>
-																			append({
-																				category_id: i.value,
-																				label: i.label,
-																				total: 0,
-																				color: i.color,
-																			})
-																		}
-																	>
-																		{i.label}
-																	</CommandItem>
-																))}
+															{flatCategories.map((i) => (
+																<CommandItem
+																	key={i.id}
+																	value={i.name}
+																	className={cn(
+																		'flex justify-between items-center',
+																		i.parentId && 'ml-4 text-foreground/80'
+																	)}
+																	disabled={selectedCategory.includes(i.id)}
+																	onSelect={() =>
+																		append({
+																			categoryId: i.id,
+																			name: i.name,
+																			planned: 0,
+																			color: i.color,
+																		})
+																	}
+																>
+																	{i.name}
+																	{selectedCategory.includes(i.id) && (
+																		<IconCheck />
+																	)}
+																</CommandItem>
+															))}
 														</CommandGroup>
 													</CommandList>
 												</Command>
@@ -482,7 +474,9 @@ export default function BudgetForm({ children }: React.PropsWithChildren) {
 											</>
 										}
 									/>
-									<Button className='flex-1'>Save</Button>
+									<Button className='flex-1' onClick={onSubmit}>
+										Save
+									</Button>
 								</div>
 							</div>
 						</MultiStepContent>
