@@ -134,7 +134,7 @@ export default function BudgetForm({ children }: React.PropsWithChildren) {
 										render={({ field }) => (
 											<FormItem>
 												<FormLabel>Name</FormLabel>
-												<Input {...field} />
+												<Input {...field} className='bg-white' autoFocus />
 											</FormItem>
 										)}
 									/>

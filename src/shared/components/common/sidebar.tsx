@@ -55,7 +55,7 @@ export function Sidebar() {
 						<PopoverTrigger asChild>
 							<button
 								className={cn(
-									'flex gap-2 w-full justify-start rounded py-1.5 px-2 text-muted-foreground hover:bg-gray-200/50 hover:text-primary'
+									'flex gap-2 w-full justify-start rounded py-1.5 px-2 text-muted-foreground hover:bg-foreground/10 hover:text-primary cursor-pointer'
 								)}
 							>
 								<Ellipsis className='w-5 h-5' />
@@ -68,7 +68,7 @@ export function Sidebar() {
 								className={buttonVariants({
 									variant: 'secondary',
 									className:
-										'bg-transparent text-muted-foreground hover:text-primary w-full justify-start font-normal',
+										'bg-transparent hover:bg-foreground/10 text-muted-foreground hover:text-primary w-full justify-start font-normal',
 								})}
 							>
 								<IconWallet className='!w-[18px] !h-[18px]' />
@@ -79,7 +79,7 @@ export function Sidebar() {
 								className={buttonVariants({
 									variant: 'secondary',
 									className:
-										'bg-transparent text-muted-foreground hover:text-primary w-full justify-start font-normal',
+										'bg-transparent hover:bg-foreground/10 text-muted-foreground hover:text-primary w-full justify-start font-normal',
 								})}
 							>
 								<IconCategory className='!w-[18px] !h-[18px]' />
@@ -145,8 +145,8 @@ function SideLink({
 		<Link
 			href={href}
 			className={cn(
-				'flex gap-2 w-full rounded py-1.5 px-2 text-muted-foreground hover:bg-gray-200/50 hover:text-primary',
-				isActive && 'bg-gray-200/30 text-primary'
+				'flex gap-2 w-full rounded py-1.5 px-2 text-muted-foreground hover:bg-foreground/10 hover:text-primary',
+				isActive && 'bg-foreground/5 text-primary'
 			)}
 		>
 			<Icon className='w-5 h-5' />

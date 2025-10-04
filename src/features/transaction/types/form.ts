@@ -1,7 +1,7 @@
 import { TransactionType } from '@/shared/types'
 
 export type TransactionForm = {
-	amount: number
+	amount: number | bigint
 	walletId: string
 	categoryId: string
 	type: TransactionType

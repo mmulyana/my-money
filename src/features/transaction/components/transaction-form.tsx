@@ -80,7 +80,12 @@ export default function TransactionForm({
 	const onSubmit = (payload: FormValues) => {
 		if (data?.id) {
 			update(
-				{ ...payload, id: data.id, type },
+				{
+					...payload,
+					id: data.id,
+					type,
+					amount: payload.amount.toString() as any,
+				},
 				{
 					onSuccess: () => {
 						setOpen(false)
@@ -90,7 +95,7 @@ export default function TransactionForm({
 			return
 		}
 		create(
-			{ ...payload, type },
+			{ ...payload, type, amount: payload.amount.toString() as any },
 			{
 				onSuccess: () => {
 					setOpen(false)
@@ -119,12 +124,13 @@ export default function TransactionForm({
 			form.reset({
 				amount: data.amount,
 				categoryId: data.categoryId,
-				date: data.date,
 				remark: data.remark || '',
 				walletId: data.walletId,
 				type: data.type,
 			})
-
+			if (data?.date) {
+				form.setValue('date', format(new Date(data?.date as any), 'yyyy-MM-dd'))
+			}
 			if (data.type) setType(data.type)
 		}
 	}, [data])
@@ -149,7 +155,7 @@ export default function TransactionForm({
 									<IconChevronLeft className='!h-6 !w-6' />
 								</Close>
 								<SheetTitle className='text-base md:text-sm text-foreground font-medium'>
-									New Transaction
+									New Record
 								</SheetTitle>
 							</div>
 							<div className='gap-2 items-center hidden md:flex'>
@@ -190,7 +196,7 @@ export default function TransactionForm({
 									render={({ field }) => (
 										<FormItem>
 											<Input
-												value={field.value}
+												value={field.value as number}
 												className='text-right px-4 py-2 shadow-none !text-4xl font-medium text-foreground h-fit border-0 !outline-0 !ring-0 rounded-none bg-gray-200'
 												onChange={(e) =>
 													!isNaN(Number(e.target.value)) &&
