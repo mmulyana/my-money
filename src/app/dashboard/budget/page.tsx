@@ -1,9 +1,10 @@
 'use client'
+
 import {
+	IconPlus,
 	IconChevronLeft,
 	IconChevronRight,
 	IconCalendarMonthFilled,
-	IconPlus,
 } from '@tabler/icons-react'
 
 import BudgetTable from '@/features/budget/components/budget-table'
@@ -17,12 +18,14 @@ export default function Page() {
 	return (
 		<div className='space-y-4 w-full'>
 			<div className='flex justify-between items-center'>
+				<p className='text-[15px] font-medium text-foreground'>Budget</p>
+
 				<div className='flex gap-1 items-center'>
 					<button
 						onClick={prev}
 						className='w-8 h-8 cursor-pointer hover:bg-white p-0 justify-center flex items-center rounded-md'
 					>
-						<IconChevronLeft size={16} strokeWidth={2.5}/>
+						<IconChevronLeft size={16} strokeWidth={2.5} />
 					</button>
 					<div className='flex gap-2 items-center w-28 justify-center'>
 						<p className='text-sm text-foreground'>{month}</p>
@@ -35,7 +38,7 @@ export default function Page() {
 						onClick={next}
 						className='w-8 h-8 cursor-pointer hover:bg-white p-0 justify-center flex items-center rounded-md'
 					>
-						<IconChevronRight size={16} strokeWidth={2.5}/>
+						<IconChevronRight size={16} strokeWidth={2.5} />
 					</button>
 				</div>
 				<div className='flex gap-2 items-center'>
