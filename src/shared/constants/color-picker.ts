@@ -1,7 +1,7 @@
 export const defaultColorsPicker = [
+	'#187D86',
 	'#4342DA',
-	'#21BE66',
 	'#F06029',
 	'#DA3955',
-	'#EBC805',
+	'#de9f0b',
 ]
