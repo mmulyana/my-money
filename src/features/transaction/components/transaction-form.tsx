@@ -321,7 +321,7 @@ export default function TransactionForm({
 											control={form.control}
 											name='date'
 											render={({ field }) => (
-												<FormItem className='flex justify-between items-center p-2 border-b '>
+												<FormItem className='flex justify-between items-center p-2 border-b'>
 													<div className='flex gap-1.5 items-center'>
 														<IconCalendarWeek size={18} />
 														<Label className='text-base md:text-sm font-normal'>
