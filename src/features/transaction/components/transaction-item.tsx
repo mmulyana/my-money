@@ -5,16 +5,14 @@ import { cn } from '@/shared/lib/utils'
 import { Transaction } from '../types'
 import TransactionForm from './transaction-form'
 import CategoryImage from '@/features/category/components/category-img'
+import WalletBadge from '@/features/wallet/components/wallet-badge'
 
-export default function TransactionItem(
-	props: Partial<Transaction> & { border: boolean }
-) {
+export default function TransactionItem(props: Partial<Transaction>) {
 	return (
 		<TransactionForm data={props}>
 			<div
 				className={cn(
-					'flex items-center justify-between py-3 px-4 cursor-pointer hover:bg-foreground/10',
-					props.border && 'border-b border-border'
+					'flex items-center justify-between py-3 px-4 cursor-pointer hover:bg-gray-400/10'
 				)}
 			>
 				<div className='flex items-center gap-2 basis-[120px] shrink-0 flex-2'>
@@ -32,17 +30,7 @@ export default function TransactionItem(
 				</div>
 
 				<div className='flex items-center justify-between gap-2.5 max-w-[200px] flex-2'>
-					<div className='flex gap-[3px] items-center bg-foreground/5 rounded-full h-5 px-2'>
-						<div
-							className='h-[5px] w-[5px] rounded-full'
-							style={{
-								backgroundColor: props?.wallet?.color,
-							}}
-						></div>
-						<p className='text-xs text-foreground/70 font-medium'>
-							{props?.wallet?.name}
-						</p>
-					</div>
+					<WalletBadge data={props?.wallet} />
 
 					<div className='flex gap-2 items-center'>
 						<span
