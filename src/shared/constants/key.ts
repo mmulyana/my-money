@@ -3,4 +3,6 @@ export const keys = {
 	Category: 'category',
 	Transaction: 'transaction',
 	Budget: 'buget',
+	Wishlist: 'wishlist',
+	MonthlySummary: 'monthly-summary',
 }
