@@ -16,14 +16,20 @@ type Slice = {
 type Props = {
 	data: Slice[]
 	total?: number
+	className?: string
 }
 
-export function SegmentBar({ data, total }: Props) {
+export function SegmentBar({ data, total, className }: Props) {
 	const totalSum = total ?? data.reduce((acc, item) => acc + item.total, 0)
 
 	return (
 		<TooltipProvider>
-			<div className='flex w-full h-3 rounded bg-muted-foreground/10 relative gap-1'>
+			<div
+				className={cn(
+					'flex w-full h-3 rounded bg-muted-foreground/10 relative gap-1',
+					className
+				)}
+			>
 				{data?.map((item) => {
 					const widthPercent = (item.total / totalSum) * 100
 
