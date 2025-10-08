@@ -23,10 +23,10 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Button, buttonVariants } from '../ui/button'
 
 const menuItems = [
-	{ icon: IconSmartHome, label: 'Home', href: '/dashboard' },
-	{ icon: IconStack2, label: 'Transaction', href: '/dashboard/transaction' },
-	{ icon: IconMap, label: 'Budget', href: '/dashboard/budget' },
-	{ icon: IconShoppingBag, label: 'Wishlist', href: '/dashboard/wishlist' },
+	{ icon: IconSmartHome, label: 'Home', href: '/app/home' },
+	{ icon: IconStack2, label: 'Transaction', href: '/app/transaction' },
+	{ icon: IconMap, label: 'Budget', href: '/app/budget' },
+	{ icon: IconShoppingBag, label: 'Wishlist', href: '/app/wishlist' },
 ]
 export function Sidebar() {
 	const pathname = usePathname()
@@ -64,7 +64,7 @@ export function Sidebar() {
 						</PopoverTrigger>
 						<PopoverContent align='start' className='w-[210px] p-1 rounded-lg'>
 							<Link
-								href={'/dashboard/wallet'}
+								href={'/app/wallet'}
 								className={buttonVariants({
 									variant: 'secondary',
 									className:
@@ -75,7 +75,7 @@ export function Sidebar() {
 								Wallet
 							</Link>
 							<Link
-								href={'/dashboard/category'}
+								href={'/app/category'}
 								className={buttonVariants({
 									variant: 'secondary',
 									className:
