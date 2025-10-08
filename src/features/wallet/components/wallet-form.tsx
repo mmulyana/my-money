@@ -30,16 +30,22 @@ import {
 import { defaultColorsPicker } from '@/shared/constants/color-picker'
 import { useEffect, useState } from 'react'
 import { useCreateWallet } from '../api/create-wallet'
+import { Wallet } from '../types'
+import { useUpdateWallet } from '../api/update-wallet'
 
 type Form = {
 	name: string
 	color: string
 }
 
-export default function WalletForm({ children }: React.PropsWithChildren) {
+export default function WalletForm({
+	data,
+	children,
+}: React.PropsWithChildren & { data?: Wallet }) {
 	const [open, setOpen] = useState(false)
 
-	const { mutate } = useCreateWallet()
+	const { mutate: create } = useCreateWallet()
+	const { mutate: update } = useUpdateWallet()
 
 	const form = useForm<Form>({
 		defaultValues: {
@@ -50,8 +56,19 @@ export default function WalletForm({ children }: React.PropsWithChildren) {
 
 	const colorWatch = form.watch('color')
 
-	const onSubmit = (data: Form) => {
-		mutate(data, {
+	const onSubmit = (payload: Form) => {
+		if (data?.id) {
+			update(
+				{ ...payload, id: data.id },
+				{
+					onSuccess: () => {
+						setOpen(false)
+					},
+				}
+			)
+			return
+		}
+		create(payload, {
 			onSuccess: () => {
 				setOpen(false)
 			},
@@ -66,6 +83,15 @@ export default function WalletForm({ children }: React.PropsWithChildren) {
 			})
 		}
 	}, [open])
+
+	useEffect(() => {
+		if (data !== undefined) {
+			form.reset({
+				color: data.color,
+				name: data.name,
+			})
+		}
+	}, [JSON.stringify(data)])
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
