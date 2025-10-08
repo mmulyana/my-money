@@ -47,6 +47,19 @@ import { useGetCategories } from '@/features/category/api/get-category'
 import { flatten } from '../utils'
 import { useCreateBudgetItem } from '../api/create-budget-item'
 import { useDeleteBudgetItem } from '../api/delete-budget-item'
+import WalletBadge from '@/features/wallet/components/wallet-badge'
+import { useDeleteBudget } from '../api/delete-budget'
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from '@/shared/components/ui/alert-dialog'
 
 export default function BudgetTable({
 	month,
@@ -56,6 +69,7 @@ export default function BudgetTable({
 	month: number
 }) {
 	const { mutate: update } = useUpdateBudget()
+	const { mutate: destroy } = useDeleteBudget()
 	const { mutate: updateItem } = useUpdateBudgetItem()
 	const { mutate: createItem } = useCreateBudgetItem()
 	const { mutate: deleteItem } = useDeleteBudgetItem()
@@ -65,7 +79,7 @@ export default function BudgetTable({
 		year,
 	})
 
-	const [expandedRows, setExpandedRows] = useState<number[]>([0])
+	const [expandedRows, setExpandedRows] = useState<number[]>([])
 
 	const toggleRow = (index: number) => {
 		setExpandedRows((prev) =>
@@ -77,7 +91,7 @@ export default function BudgetTable({
 	const flatCategories = flatten(categories?.data || [])
 
 	return (
-		<div className='rounded-lg bg-white border overflow-hidden'>
+		<div className='rounded-lg bg-white border overflow-hidden shadow-xs'>
 			<Table>
 				<TableHeader>
 					<TableRow className='hover:bg-white'>
@@ -228,49 +242,54 @@ export default function BudgetTable({
 											</PopoverContent>
 										</Popover>
 									</TableCell>
-									<TableCell className='w-[240px] text-right'>
-										<ModeProvider defaultKey='view'>
-											<ModeItem keyName='view'>
-												{({ onActivate }) => (
-													<div className='flex gap-1 items-center justify-end transition-all ease-in group'>
-														<p>{budget.total}</p>
-														<Button
-															onClick={() => onActivate('edit')}
-															className='p-0 h-5 w-4 rounded hidden group-hover:flex'
-															variant={'ghost'}
-														>
-															<IconPencil size={14} />
-														</Button>
-													</div>
-												)}
-											</ModeItem>
+									<TableCell className='w-[240px]'>
+										<div className='w-[88px] ml-auto'>
+											<ModeProvider defaultKey='view'>
+												<ModeItem keyName='view'>
+													{({ onActivate }) => (
+														<div className='flex gap-1 items-center justify-end transition-all ease-in group'>
+															<p>{budget.total}</p>
+															<Button
+																onClick={() => onActivate('edit')}
+																className='p-0 h-5 w-4 rounded hidden group-hover:flex'
+																variant={'ghost'}
+															>
+																<IconPencil size={14} />
+															</Button>
+														</div>
+													)}
+												</ModeItem>
 
-											<ModeItem keyName='edit'>
-												{({ onActivate }) => (
-													<Input
-														defaultValue={budget.total}
-														className='w-24 text-right h-fit py-0.5 border-x-0 rounded border-transparent border bg-muted'
-														autoFocus
-														onKeyDown={(e) => {
-															if (e.key === 'Enter') {
-																const newValue = Number(
-																	(e.target as HTMLInputElement).value
-																)
-																update(
-																	{ id: budget.id, total: newValue },
-																	{
-																		onSuccess: () => {
-																			onActivate('view')
+												<ModeItem keyName='edit'>
+													{({ onActivate }) => (
+														<Input
+															defaultValue={budget.total}
+															className='w-24 text-right h-fit py-0.5 border-x-0 rounded border-transparent border bg-muted'
+															autoFocus
+															onKeyDown={(e) => {
+																if (e.key === 'Enter') {
+																	const newValue = Number(
+																		(e.target as HTMLInputElement).value
+																	)
+																	update(
+																		{
+																			id: budget.id,
+																			total: newValue.toString(),
 																		},
-																	}
-																)
-															}
-														}}
-														onBlur={() => onActivate('view')}
-													/>
-												)}
-											</ModeItem>
-										</ModeProvider>
+																		{
+																			onSuccess: () => {
+																				onActivate('view')
+																			},
+																		}
+																	)
+																}
+															}}
+															onBlur={() => onActivate('view')}
+														/>
+													)}
+												</ModeItem>
+											</ModeProvider>
+										</div>
 									</TableCell>
 									<TableCell className='w-[240px] text-right'>
 										{budget.spent}
@@ -281,14 +300,59 @@ export default function BudgetTable({
 									<TableCell className='w-[200px]'>
 										<ProgressBar progress={budget.usage} />
 									</TableCell>
-									<TableCell className={cn('w-[100px] py-2 text-center')}>
-										{budget.wallet.name}
+									<TableCell className={cn('w-[100px] py-2')}>
+										<div className='flex justify-center'>
+											<WalletBadge data={budget?.wallet} />
+										</div>
 									</TableCell>
 									<TableCell className='w-[80px]'>
 										<div className='flex justify-end pr-2'>
-											<Button variant={'ghost'} size={'sm'}>
-												<IconDots size={18} />
-											</Button>
+											<Popover>
+												<PopoverTrigger asChild>
+													<Button variant={'ghost'} size={'sm'}>
+														<IconDots size={18} />
+													</Button>
+												</PopoverTrigger>
+												<PopoverContent className='w-fit p-1' align='end'>
+													<AlertDialog>
+														<AlertDialogTrigger asChild>
+															<Button
+																variant={'ghost'}
+																className='rounded text-red-500 hover:text-red-600'
+																size={'sm'}
+															>
+																<IconTrashFilled />
+																<p>Delete</p>
+															</Button>
+														</AlertDialogTrigger>
+														<AlertDialogContent>
+															<AlertDialogHeader>
+																<AlertDialogTitle>
+																	Are you absolutely sure?
+																</AlertDialogTitle>
+																<AlertDialogDescription>
+																	This action cannot be undone. This will
+																	permanently delete "{budget.name}" and remove
+																	related data from our servers.
+																</AlertDialogDescription>
+															</AlertDialogHeader>
+															<AlertDialogFooter>
+																<AlertDialogCancel>Cancel</AlertDialogCancel>
+																<AlertDialogAction
+																	className='bg-red-500 hover:bg-red-600'
+																	onClick={() =>
+																		destroy({
+																			id: budget.id,
+																		})
+																	}
+																>
+																	Continue
+																</AlertDialogAction>
+															</AlertDialogFooter>
+														</AlertDialogContent>
+													</AlertDialog>
+												</PopoverContent>
+											</Popover>
 										</div>
 									</TableCell>
 								</TableRow>
@@ -334,6 +398,7 @@ export default function BudgetTable({
 												<TableCell className={cn('w-[240px] py-2')}>
 													<div className='flex justify-end'>
 														<Input
+															key={cat.id}
 															defaultValue={cat.planned}
 															className='w-24 text-right bg-white'
 															onKeyDown={(e) => {
@@ -343,7 +408,7 @@ export default function BudgetTable({
 																	)
 																	updateItem({
 																		id: cat.id,
-																		planned: newValue,
+																		planned: newValue.toString(),
 																		categoryId: cat.category.id,
 																	})
 																}
