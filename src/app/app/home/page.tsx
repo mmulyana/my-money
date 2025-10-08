@@ -7,15 +7,14 @@ import RecentTransaction from '@/features/transaction/components/recent-transact
 
 export default function Home() {
 	return (
-		<div className='flex gap-4'>
+		<div className='flex gap-4 flex-col md:flex-row'>
 			<div className='flex-1 space-y-4'>
-				<BalanceTotalCard />
+				{/* <BalanceTotalCard /> */}
 				<BalanceMonthCard />
-				<RecentTransaction />
+				<DailyExpenseCard />
 			</div>
 			<div className='flex-1 space-y-4'>
 				<BudgetInfo />
-				<DailyExpenseCard />
 				<SpendingCategoryCard />
 			</div>
 		</div>
