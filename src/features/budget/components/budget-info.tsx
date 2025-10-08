@@ -34,12 +34,14 @@ export default function BudgetInfo() {
 					<p className='text-sm text-foreground/50'>Budget</p>
 					<p className='text-sm text-foreground/50'>Remaining</p>
 				</div>
-				<div className='space-y-4'>
+				<div className='space-y-6'>
 					{data?.data?.map((i) => (
 						<div key={i.id}>
-							<div className='flex justify-between mb-2'>
+							<div className='flex justify-between mb-1'>
 								<p className='text-foreground text-base'>{i.name}</p>
-								<p className='text-foreground text-base'>{i.remaining}</p>
+								<p className='text-foreground text-base font-medium'>
+									{i.remaining}
+								</p>
 							</div>
 							<SegmentBar
 								total={i.total}
@@ -53,8 +55,11 @@ export default function BudgetInfo() {
 								}
 							/>
 							<div className='flex justify-end mt-1'>
-								<p className='text-foreground'>
-									{i.total}/<span className='opacity-50'>{i.spent}</span>
+								<p className='text-foreground font-medium'>
+									{i.spent}
+									<span className='opacity-50 font-normal text-sm'>
+										/{i.total}
+									</span>
 								</p>
 							</div>
 						</div>
