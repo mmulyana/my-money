@@ -41,7 +41,7 @@ export default function Page() {
 	}
 
 	return (
-		<div className='flex gap-4 flex-col md:flex-row'>
+		<div className='flex gap-4 flex-col md:flex-row max-w-3xl mx-auto'>
 			<div className='flex-1'>
 				<div className='flex justify-between items-center mb-4'>
 					<p className='text-[15px] font-medium text-foreground'>Categories</p>
