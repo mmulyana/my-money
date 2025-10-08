@@ -5,4 +5,6 @@ export const keys = {
 	Budget: 'buget',
 	Wishlist: 'wishlist',
 	MonthlySummary: 'monthly-summary',
+	ExpenseRange: 'expense-range',
+	ExpenseCategory: 'expense-category',
 }
