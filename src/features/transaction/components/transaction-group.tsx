@@ -10,20 +10,13 @@ type TransactionGroupProps = {
 
 export function TransactionGroup(props: TransactionGroupProps) {
 	return (
-		<div className='mb-6'>
-			<div className='flex justify-between items-center mb-3'>
-				<span className='text-foreground/50 text-sm'>{props.date}</span>
-				<span
-					className={cn(
-						'text-foreground text-sm',
-						props.amount < 1 && 'text-red-500'
-					)}
-				>
-					{props.amount}
-				</span>
+		<div className='bg-white rounded-lg overflow-hidden shadow-xs'>
+			<div className='flex justify-between items-center p-4 py-2 border-b border-dashed'>
+				<span className='text-foreground/50'>{props.date}</span>
+				<span className={cn('text-foreground text-right')}>{props.amount}</span>
 			</div>
 
-			<div className='bg-white rounded-lg overflow-hidden'>
+			<div>
 				{props.transactions?.map((t, idx) => (
 					<TransactionItem
 						key={t.id}
@@ -36,7 +29,6 @@ export function TransactionGroup(props: TransactionGroupProps) {
 						category={t.category}
 						type={t.type}
 						wallet={t.wallet}
-						border={idx < props.transactions.length - 1}
 					/>
 				))}
 			</div>
