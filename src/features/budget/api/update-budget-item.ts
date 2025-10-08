@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 type Body = {
 	categoryId: string
 	id: string
-	planned: number
+	planned: string | number
 	budgetId: string
 }
 
