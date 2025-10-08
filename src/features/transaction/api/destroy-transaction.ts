@@ -14,6 +14,7 @@ export const useDestroyTransaction = () => {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: [keys.Transaction] })
 			queryClient.invalidateQueries({ queryKey: [keys.Wallet] })
+			queryClient.invalidateQueries({ queryKey: [keys.Budget] })
 		},
 	})
 }
