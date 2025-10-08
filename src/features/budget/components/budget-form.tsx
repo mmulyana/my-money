@@ -301,7 +301,7 @@ export default function BudgetForm({ children }: React.PropsWithChildren) {
 															className='cursor-text'
 														>
 															<AnimatedCounter
-																value={total}
+																value={total as number}
 																fontSize='30px'
 																includeDecimals={false}
 																incrementColor='#187D86'
@@ -348,7 +348,7 @@ export default function BudgetForm({ children }: React.PropsWithChildren) {
 												name: i.name,
 												total: i.planned,
 											}))}
-											total={total}
+											total={total as number}
 										/>
 										<div className='flex justify-between items-start'>
 											<div className='text-left'>
@@ -362,7 +362,7 @@ export default function BudgetForm({ children }: React.PropsWithChildren) {
 													Remaining
 												</p>
 												<p className='text-lg font-medium text-foreground'>
-													{total - totalCategory}
+													{(total as number) - totalCategory}
 												</p>
 											</div>
 										</div>
