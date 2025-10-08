@@ -1,16 +1,18 @@
 'use client'
 
-import * as React from 'react'
+import { IconChevronRight, IconDots } from '@tabler/icons-react'
 import {
-	useReactTable,
 	getCoreRowModel,
+	useReactTable,
 	flexRender,
 	ColumnDef,
 } from '@tanstack/react-table'
 
+import ProgressBar from '@/shared/components/common/progress-bar'
 import { DataTableHeader } from '@/shared/components/ui/data-table/data-table-header'
 import { DataTableCell } from '@/shared/components/ui/data-table/data-table-cell'
-import ProgressBar from '@/shared/components/common/progress-bar'
+import { Button } from '@/shared/components/ui/button'
+import { cn } from '@/shared/lib/utils'
 import {
 	Table,
 	TableRow,
@@ -19,31 +21,11 @@ import {
 	TableHead,
 	TableHeader,
 } from '@/shared/components/ui/table'
-import { Button } from '@/shared/components/ui/button'
-import { IconDots } from '@tabler/icons-react'
-import { cn } from '@/shared/lib/utils'
 
-type Budget = {
-	name: string
-	total: string
-	funded: string
-	deadline: string
-	daysLeft: number
-	progress: number
-}
+import { useGetWishlist } from '../api/get-wishlist'
+import { Wishlist } from '../types'
 
-const data: Budget[] = [
-	{
-		name: 'Iphone 13',
-		total: '8.000.000',
-		funded: '4.000.000',
-		deadline: '30/11/2025',
-		daysLeft: 10,
-		progress: 28,
-	},
-]
-
-export const columns: ColumnDef<Budget>[] = [
+export const columns: ColumnDef<Wishlist>[] = [
 	{
 		accessorKey: 'name',
 		header: ({ column }) => <DataTableHeader column={column} title='Name' />,
@@ -75,7 +57,7 @@ export const columns: ColumnDef<Budget>[] = [
 		enableSorting: false,
 	},
 	{
-		accessorKey: 'deadline',
+		accessorKey: 'deadlineAt',
 		header: ({ column }) => (
 			<DataTableHeader
 				column={column}
@@ -107,9 +89,7 @@ export const columns: ColumnDef<Budget>[] = [
 			<DataTableCell
 				cell={cell}
 				render={(value: number) => (
-					<div>
-						<ProgressBar progress={value} color='#187D86' />
-					</div>
+					<ProgressBar progress={value} color='#187D86' />
 				)}
 			/>
 		),
@@ -119,9 +99,9 @@ export const columns: ColumnDef<Budget>[] = [
 		id: 'action',
 		header: '',
 		cell: () => (
-			<div className='flex justify-end w-full pr-4'>
-				<Button variant={'ghost'} className='!py-0'>
-					<IconDots size={24} />
+			<div className='flex justify-end'>
+				<Button variant={'ghost'} className='hover:bg-muted-foreground/10 h-8 w-8'>
+					<IconChevronRight className='!w-5 !h-5 text-foreground/50' strokeWidth={2.5}/>
 				</Button>
 			</div>
 		),
@@ -129,14 +109,16 @@ export const columns: ColumnDef<Budget>[] = [
 ]
 
 export default function WishlistTable() {
+	const { data } = useGetWishlist()
+
 	const table = useReactTable({
-		data,
+		data: data?.data || [],
 		columns,
 		getCoreRowModel: getCoreRowModel(),
 	})
 
 	return (
-		<div className='rounded-lg bg-white border'>
+		<div className='rounded-lg bg-white border shadow-xs overflow-hidden'>
 			<Table>
 				<TableHeader>
 					{table.getHeaderGroups().map((headerGroup) => (
@@ -146,7 +128,7 @@ export default function WishlistTable() {
 									key={header.id}
 									className={cn(
 										'whitespace-nowrap h-12 text-foreground/80',
-										header.index === 0 && 'pl-4',
+										header.index === 0 && 'pl-4'
 									)}
 								>
 									{header.isPlaceholder
