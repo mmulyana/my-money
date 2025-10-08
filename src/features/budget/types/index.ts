@@ -3,7 +3,7 @@ import { Wallet } from '@/features/wallet/types'
 
 export type budgetForm = {
 	name: string
-	total: number
+	total: number | string
 	walletId: string
 	startAt: string
 	endAt: string
