@@ -5,7 +5,7 @@ type Props = {
 
 export default function ProgressBar({ progress, color = '#187D86' }: Props) {
 	return (
-		<div className='flex items-center gap-0.5 w-full'>
+		<div className='flex items-center gap-0.5 w-[240px] lg:w-full'>
 			{/* Track */}
 			<div className='flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden'>
 				{/* Filled part */}
