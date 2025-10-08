@@ -12,10 +12,10 @@ type Param = {
 	year: number
 }
 
-export const getBudget = (param?: Param) => {
+export const getBudget = async (param?: Param) => {
 	const { pagination, year, month } = param || {}
 
-	return api
+	return await api
 		.get<Api<Budget[]>>('budget', {
 			searchParams: {
 				page: pagination?.page,
