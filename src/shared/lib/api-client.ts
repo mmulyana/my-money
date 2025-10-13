@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie'
 import ky from 'ky'
 
 const api = ky.create({
@@ -5,7 +6,10 @@ const api = ky.create({
 	hooks: {
 		beforeRequest: [
 			(request) => {
-				request.headers.set('Authorization', 'Bearer aaa')
+				const token = Cookies.get('access_token')
+				if (token) {
+					request.headers.set('Authorization', `Bearer ${token}`)
+				}
 			},
 		],
 	},

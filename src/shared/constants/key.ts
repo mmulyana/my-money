@@ -7,4 +7,5 @@ export const keys = {
 	MonthlySummary: 'monthly-summary',
 	ExpenseRange: 'expense-range',
 	ExpenseCategory: 'expense-category',
+	Me: "me"
 }

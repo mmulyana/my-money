@@ -21,6 +21,7 @@ import { cn } from '@/shared/lib/utils'
 
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Button, buttonVariants } from '../ui/button'
+import ProfileSidebar from '@/features/auth/components/profile-sidebar'
 
 const menuItems = [
 	{ icon: IconSmartHome, label: 'Home', href: '/app/home' },
@@ -92,39 +93,7 @@ export function Sidebar() {
 				<WalletSidebar />
 			</div>
 
-			<Popover>
-				<PopoverTrigger asChild>
-					<div className='flex justify-between items-center p-2 rounded hover:bg-muted-foreground/5 mt-auto w-full cursor-pointer'>
-						<div className='flex items-center gap-2'>
-							<div className='h-8 w-8 rounded bg-gray-300'></div>
-							<p className='text-base font-medium'>mulyana</p>
-						</div>
-						<button>
-							<ChevronsUpDown size={18} />
-						</button>
-					</div>
-				</PopoverTrigger>
-				<PopoverContent className='w-[210px] p-2 space-y-2'>
-					<div className='flex items-center gap-2 border-b pb-2'>
-						<div className='h-8 w-8 rounded bg-gray-300'></div>
-						<p className='text-base leading-none'>mulyana</p>
-					</div>
-					<Button
-						className='w-full justify-start rounded bg-transparent'
-						variant={'secondary'}
-					>
-						<IconSettings />
-						Setting
-					</Button>
-					<Button
-						className='w-full justify-start rounded bg-transparent hover:text-red-500'
-						variant={'secondary'}
-					>
-						<IconLogout />
-						Logout
-					</Button>
-				</PopoverContent>
-			</Popover>
+			<ProfileSidebar />
 		</div>
 	)
 }
