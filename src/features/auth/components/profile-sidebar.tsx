@@ -10,14 +10,13 @@ import { useGetMe } from '../api/get-me'
 
 export default function ProfileSidebar() {
 	const { data } = useGetMe()
-	console.log('data', data?.data)
 	return (
 		<Popover>
 			<PopoverTrigger asChild>
 				<div className='flex justify-between items-center p-2 rounded hover:bg-muted-foreground/5 mt-auto w-full cursor-pointer'>
 					<div className='flex items-center gap-2'>
 						<div className='h-8 w-8 rounded bg-gray-300'></div>
-						<p className='text-base font-medium'>mulyana</p>
+						<p className='text-base font-medium'>{data?.data?.username}</p>
 					</div>
 					<button>
 						<ChevronsUpDown size={18} />
@@ -27,7 +26,7 @@ export default function ProfileSidebar() {
 			<PopoverContent className='w-[210px] p-2 space-y-2'>
 				<div className='flex items-center gap-2 border-b pb-2'>
 					<div className='h-8 w-8 rounded bg-gray-300'></div>
-					<p className='text-base leading-none'>mulyana</p>
+					<p className='text-base leading-none'>{data?.data?.username}</p>
 				</div>
 				<Button
 					className='w-full justify-start rounded bg-transparent'

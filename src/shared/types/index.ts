@@ -26,3 +26,13 @@ export type ApiError = {
 }
 
 export type TransactionType = 'expense' | 'income' | 'transfer'
+
+export type User = {
+	id: string
+	username: string
+	email?: string | null
+	isGuest: boolean
+	photoUrl?: string | null
+	createdAt: string
+	updatedAt: string
+}

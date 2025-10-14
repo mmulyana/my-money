@@ -24,7 +24,7 @@ import { Button, buttonVariants } from '../ui/button'
 import ProfileSidebar from '@/features/auth/components/profile-sidebar'
 
 const menuItems = [
-	{ icon: IconSmartHome, label: 'Home', href: '/app/home' },
+	{ icon: IconSmartHome, label: 'Home', href: '/app' },
 	{ icon: IconStack2, label: 'Transaction', href: '/app/transaction' },
 	{ icon: IconMap, label: 'Budget', href: '/app/budget' },
 	{ icon: IconShoppingBag, label: 'Wishlist', href: '/app/wishlist' },
