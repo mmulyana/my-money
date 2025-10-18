@@ -1,16 +1,14 @@
 'use client'
 
-import { ChevronsUpDown, Ellipsis } from 'lucide-react'
 import { usePathname } from 'next/navigation'
+import { Ellipsis } from 'lucide-react'
 import { ComponentType } from 'react'
 import Link from 'next/link'
 import {
 	IconMap,
 	IconStack2,
 	IconWallet,
-	IconLogout,
 	IconCategory,
-	IconSettings,
 	IconPigFilled,
 	IconSmartHome,
 	IconShoppingBag,
@@ -20,7 +18,7 @@ import WalletSidebar from '@/features/wallet/components/wallet-sidebar'
 import { cn } from '@/shared/lib/utils'
 
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
-import { Button, buttonVariants } from '../ui/button'
+import { buttonVariants } from "../ui/button"
 import ProfileSidebar from '@/features/auth/components/profile-sidebar'
 
 const menuItems = [
