@@ -21,7 +21,7 @@ export default function TransactionOverviewCard({
   const total = data?.total ?? 0;
 
   return (
-    <div className="bg-white rounded-lg p-4 pb-5">
+    <div className="bg-white lg:rounded-lg p-4 pb-5">
       <p className="text-[13px] font-medium text-foreground mb-4">
         {variant === "expense" ? "Spending" : "Income"} Overview
       </p>

@@ -48,7 +48,7 @@ export function BalanceOverview() {
   return (
     <div className="flex flex-col gap-4">
       {/* Header */}
-      <div className="flex items-center flex-col gap-1 justify-center bg-white p-4 rounded-xl">
+      <div className="flex items-center flex-col gap-1 justify-center bg-white p-4 lg:rounded-xl">
         <h2 className="text-sm text-muted-foreground">Total Balance</h2>
         <p className="text-lg font-semibold">Rp 20.000.000.000</p>
         <Popover>
@@ -81,7 +81,7 @@ export function BalanceOverview() {
       </div>
 
       {/* Income & Expense Summary */}
-      <div className="flex justify-between gap-4">
+      <div className="flex justify-between gap-4 px-4 lg:px-0">
         <div className="flex flex-col gap-1 flex-1 bg-white p-4 rounded-lg">
           <div className="flex items-center gap-2 text-muted-foreground">
             <ArrowUpRight className="h-4 w-4" style={{ color: "#10A986" }} />
@@ -109,7 +109,7 @@ export function BalanceOverview() {
       </div>
 
       {/* Chart */}
-      <div className="px-4 pt-4 bg-white rounded-lg">
+      <div className="px-4 pt-4 bg-white lg:rounded-lg">
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-sm font-medium text-muted-foreground">
             Overview
