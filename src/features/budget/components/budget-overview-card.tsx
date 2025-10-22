@@ -1,19 +1,49 @@
 import ProgressBar from "@/shared/components/common/progress-bar";
 import { useGetBudget } from "../api/get-budget";
 import useCalendarMonth from "@/shared/hooks/use-calendar-month";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyTitle,
+} from "@/shared/components/ui/empty";
+import BudgetForm from "./budget-form";
+import { Button } from "@/shared/components/ui/button";
 
 export default function BudgetOverviewCard() {
-  const { month, year } = useCalendarMonth();
+  const { monthIndex, year } = useCalendarMonth();
 
   const { data } = useGetBudget({
-    month: +month,
+    month: monthIndex,
     year,
   });
 
-  return (
-    <div className="p-4 lg:rounded-lg w-full bg-white">
-      <p className="text-[13px] font-medium text-foreground mb-4">Budgets</p>
+  if (data?.data?.length === 0) {
+    return (
+      <Wrapper>
+        <Empty>
+          <EmptyHeader>
+            <EmptyTitle>No budget yet</EmptyTitle>
+            <EmptyDescription>
+              Get started by creating your first budget
+            </EmptyDescription>
+          </EmptyHeader>
 
+          <EmptyContent>
+            <BudgetForm>
+              <Button size={"sm"} variant={"secondary"}>
+                New Budget
+              </Button>
+            </BudgetForm>
+          </EmptyContent>
+        </Empty>
+      </Wrapper>
+    );
+  }
+
+  return (
+    <Wrapper>
       <div className="space-y-4">
         {data?.data?.map((i) => (
           <div
@@ -36,6 +66,15 @@ export default function BudgetOverviewCard() {
           </div>
         ))}
       </div>
+    </Wrapper>
+  );
+}
+
+function Wrapper({ children }: React.PropsWithChildren) {
+  return (
+    <div className="p-4 lg:rounded-lg w-full bg-white">
+      <p className="text-[13px] font-medium text-foreground mb-4">Budgets</p>
+      {children}
     </div>
   );
 }
