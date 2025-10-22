@@ -3,7 +3,7 @@ import ky from "ky";
 import { redirectToLogin } from "./utils";
 
 const api = ky.create({
-  prefixUrl: "http://localhost:3000/api/",
+  prefixUrl: "http://localhost:3001/api/",
   hooks: {
     beforeRequest: [
       (request) => {
