@@ -1,12 +1,44 @@
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyTitle,
+} from "@/shared/components/ui/empty";
+
 import ProgressBar from "@/shared/components/common/progress-bar";
 import { useGetWishlist } from "../api/get-wishlist";
+import WishlistForm from "./wishlist-form";
+import { Button } from "@/shared/components/ui/button";
 
 export default function GoalsOverviewCard() {
   const { data } = useGetWishlist({});
-  return (
-    <div className="p-4 lg:rounded-lg w-full bg-white">
-      <p className="text-[13px] font-medium text-foreground mb-4">Goals</p>
 
+  if (data?.data?.length === 0) {
+    return (
+      <Wrapper>
+        <Empty>
+          <EmptyHeader>
+            <EmptyTitle>No goals yet</EmptyTitle>
+            <EmptyDescription>
+              Get started by creating your first goal
+            </EmptyDescription>
+          </EmptyHeader>
+
+          <EmptyContent>
+            <WishlistForm>
+              <Button size={"sm"} variant={"secondary"}>
+                New Goal
+              </Button>
+            </WishlistForm>
+          </EmptyContent>
+        </Empty>
+      </Wrapper>
+    );
+  }
+
+  return (
+    <Wrapper>
       <div className="flex flex-col gap-4">
         {data?.data?.map((i) => (
           <div
@@ -34,6 +66,15 @@ export default function GoalsOverviewCard() {
           </div>
         ))}
       </div>
+    </Wrapper>
+  );
+}
+
+function Wrapper({ children }: React.PropsWithChildren) {
+  return (
+    <div className="p-4 lg:rounded-lg w-full bg-white">
+      <p className="text-[13px] font-medium text-foreground mb-4">Goals</p>
+      {children}
     </div>
   );
 }
