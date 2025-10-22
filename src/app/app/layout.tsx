@@ -6,7 +6,7 @@ export default function Layout({ children }: React.PropsWithChildren) {
       <div className="hidden lg:flex w-[240px]">
         <Sidebar />
       </div>
-      <div className="flex-1 min-w-0">{children}</div>
+      <div className="flex-1 min-w-0 lg:pr-4 lg:pb-4">{children}</div>
     </div>
   );
 }
