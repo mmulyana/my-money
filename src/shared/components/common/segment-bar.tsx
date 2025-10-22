@@ -24,7 +24,12 @@ export function SegmentBar({ data, total, className }: Props) {
 
   return (
     <TooltipProvider>
-      <div className={cn("flex w-full h-3 rounded relative gap-1", className)}>
+      <div
+        className={cn(
+          "flex w-full h-3 !bg-muted-foreground/10 rounded relative gap-1",
+          className,
+        )}
+      >
         {data?.map((item) => {
           const widthPercent = (item.total / totalSum) * 100;
 
