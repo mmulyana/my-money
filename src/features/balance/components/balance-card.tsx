@@ -13,6 +13,7 @@ import { useGetWallet } from "@/features/wallet/api/get-wallet";
 import { Wallet } from "@/features/wallet/types";
 
 export function BalanceOverview() {
+  const [open, setOpen] = useState(false);
   const { data } = useGetWallet({});
 
   const [wallet, setWallet] = useState<Partial<Wallet>>({
@@ -56,14 +57,12 @@ export function BalanceOverview() {
 
   return (
     <div className="flex items-center flex-col gap-1 justify-center bg-white p-4 lg:rounded-xl">
-      <h2 className="text-sm text-muted-foreground">Total Balance</h2>
-      <p className="text-lg font-semibold">{showBalance(wallet.id || "")}</p>
-      <Popover>
+      <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             size={"sm"}
-            className="flex items-center gap-2 bg-white shadow-none"
+            className="flex mb-2 py-1 !pr-1.5 w-fit h-fit items-center gap-2 bg-white shadow-none rounded-full"
           >
             {wallet?.name} <ChevronDown className="h-4 w-4" />
           </Button>
@@ -72,12 +71,13 @@ export function BalanceOverview() {
           {options.map((option) => (
             <div
               key={option.id}
-              onClick={() =>
+              onClick={() => {
                 setWallet({
                   id: option.id,
                   name: option.name,
-                })
-              }
+                });
+                setOpen(false);
+              }}
               className={cn(
                 "cursor-pointer rounded px-3 py-2 text-sm hover:bg-muted",
               )}
@@ -87,6 +87,8 @@ export function BalanceOverview() {
           ))}
         </PopoverContent>
       </Popover>
+      <h2 className="text-sm text-muted-foreground">Total Balance</h2>
+      <p className="text-xl font-semibold">{showBalance(wallet.id || "")}</p>
     </div>
   );
 }
