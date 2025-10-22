@@ -27,9 +27,8 @@ export default function TransactionOverviewCard({
       </p>
       <div className="space-y-5">
         {data?.data?.map((i) => {
-          const percent = (i.total / total) * 100;
           return (
-            <div className="flex gap-2 items-start" key={i.id}>
+            <div className="flex gap-2 items-center" key={i.id}>
               <div className="w-9 shrink-0">
                 <CategoryImage
                   color={i.color}
@@ -39,12 +38,10 @@ export default function TransactionOverviewCard({
               </div>
               <div className="space-y-1 flex-1">
                 <div className="flex justify-between items-center">
-                  <p className="text-sm text-foreground/80">{i.name}</p>
-                  <p className="text-sm text-foreground/80">
-                    {percent.toFixed(0)}%
-                  </p>
+                  <p className="text-base text-foreground/80">{i.name}</p>
+                  <p className="text-base text-foreground">{i.total}</p>
                 </div>
-                <SegmentBar
+                {/*<SegmentBar
                   className="bg-transparent"
                   total={total}
                   data={[
@@ -55,7 +52,7 @@ export default function TransactionOverviewCard({
                       total: i.total,
                     },
                   ]}
-                />
+                />*/}
               </div>
             </div>
           );
