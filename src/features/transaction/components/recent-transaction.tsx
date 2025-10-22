@@ -14,7 +14,7 @@ export default function RecentTransaction() {
     month: monthIndex,
     year,
     pagination: {
-      limit: 10,
+      limit: 5,
       page: 1,
     },
   });
