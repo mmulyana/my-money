@@ -1,6 +1,5 @@
 "use client";
 
-import DailyExpenseCard from "@/features/transaction/components/daily-expense-card";
 import BalanceMonthCard from "@/features/balance/components/balance-month-card";
 import BalanceTotalCard from "@/features/balance/components/balance-total-card";
 import BudgetInfo from "@/features/budget/components/budget-info";
@@ -11,6 +10,8 @@ import TransactionOverviewCard from "@/features/transaction/components/transacti
 import BudgetOverviewCard from "@/features/budget/components/budget-overview-card";
 import GoalsOverviewCard from "@/features/wishlist/components/goals-overview-card";
 import ProfileButton from "@/features/auth/components/profile-button";
+import TransactionSummary from "@/features/transaction/components/transaction-summary";
+import TransactionChart from "@/features/transaction/components/transaction-chart";
 
 export default function Home() {
   useCallbackOauth();
@@ -24,6 +25,8 @@ export default function Home() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="space-y-4">
           <BalanceChart />
+          <TransactionSummary />
+          <TransactionChart />
           <RecentTransaction />
         </div>
         <div className="space-y-4">
