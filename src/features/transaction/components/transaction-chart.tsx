@@ -1,7 +1,15 @@
-import { BarChart, Bar, XAxis, YAxis } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  ResponsiveContainer,
+} from "recharts";
 import { useState } from "react";
 
 import {
+  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
@@ -14,7 +22,7 @@ import {
 import { Button } from "@/shared/components/ui/button";
 import { IconCaretDownFilled } from "@tabler/icons-react";
 import { cn } from "@/shared/lib/utils";
-type TimeRange = "Last 7 Days" | "Last 14 Days" | "Last 30 Days";
+import { useTransactionChart } from "../api/get-transaction-chart";
 
 type ChartData = {
   date: string;
@@ -22,22 +30,43 @@ type ChartData = {
   expense: number;
 };
 
+const defaultOption = [
+  {
+    value: "1w",
+    name: "Last 7 Days",
+  },
+  {
+    value: "2w",
+    name: "Last 14 Days",
+  },
+  {
+    value: "1m",
+    name: "Last 30 Days",
+  },
+];
+
+const chartConfig = {
+  income: {
+    label: "Income",
+    color: "#10A986",
+  },
+  expense: {
+    label: "Expense",
+    color: "#EEE8E9",
+  },
+} satisfies ChartConfig;
+
 export default function TransactionChart() {
-  const [timeRange, setTimeRange] = useState<TimeRange>("Last 7 Days");
+  const [timeRange, setTimeRange] = useState<{ value: string; name: string }>(
+    defaultOption[0],
+  );
 
-  const data: ChartData[] = [
-    { date: "8 Oct", income: 20000000000, expense: 10000000000 },
-    { date: "10 Oct", income: 20000000000, expense: 12000000000 },
-    { date: "12 Oct", income: 20000000000, expense: 15000000000 },
-    { date: "14 Oct", income: 20000000000, expense: 14000000000 },
-    { date: "16 Oct", income: 15000000000, expense: 10000000000 },
-    { date: "18 Oct", income: 20000000000, expense: 11000000000 },
-    { date: "20 Oct", income: 14000000000, expense: 9000000000 },
-  ];
-
-  function handleTimeRangeChange(range: TimeRange): void {
-    setTimeRange(range);
-  }
+  const [date] = useState(new Date());
+  const { data } = useTransactionChart({
+    date: date.toString(),
+    range: timeRange.value,
+    enabled: !!date,
+  });
 
   return (
     <div className="px-4 pt-4 bg-white lg:rounded-lg">
@@ -51,37 +80,43 @@ export default function TransactionChart() {
               size="sm"
               className="flex items-center gap-2 bg-white shadow-none"
             >
-              {timeRange} <IconCaretDownFilled className="h-4 w-4" />
+              {timeRange.name} <IconCaretDownFilled className="h-4 w-4" />
             </Button>
           </PopoverTrigger>
           <PopoverContent align="end" className="w-fit p-1">
-            {(
-              ["Last 7 Days", "Last 14 Days", "Last 30 Days"] as TimeRange[]
-            ).map((range) => (
+            {defaultOption.map((range) => (
               <div
-                key={range}
-                onClick={() => handleTimeRangeChange(range)}
+                key={range.value}
+                onClick={() =>
+                  setTimeRange({
+                    name: range.name,
+                    value: range.value,
+                  })
+                }
                 className={cn(
                   "cursor-pointer rounded px-3 py-2 text-sm hover:bg-muted",
                   timeRange === range && "bg-muted font-medium",
                 )}
               >
-                {range}
+                {range.name}
               </div>
             ))}
           </PopoverContent>
         </Popover>
       </div>
 
-      <ChartContainer className="h-[120px] w-full" config={{}}>
-        <BarChart data={data} barSize={12}>
-          <XAxis dataKey="date" tickLine={false} axisLine={false} />
-          <YAxis hide />
-          <ChartTooltip content={<ChartTooltipContent />} />
-          <Bar dataKey="income" fill="#10A986" radius={[6, 6, 0, 0]} />
-          <Bar dataKey="expense" fill="#EEE8E9" radius={[6, 6, 0, 0]} />
-        </BarChart>
-      </ChartContainer>
+      <ResponsiveContainer width="100%" height={120}>
+        <ChartContainer config={chartConfig} className="h-full w-full">
+          <BarChart accessibilityLayer data={data?.data} barSize={12}>
+            <CartesianGrid vertical={false} />
+            <XAxis dataKey="date" tickLine={false} axisLine={false} />
+            <YAxis hide />
+            <ChartTooltip content={<ChartTooltipContent />} />
+            <Bar dataKey="income" fill="#10A986" radius={[6, 6, 0, 0]} />
+            <Bar dataKey="expense" fill="#EEE8E9" radius={[6, 6, 0, 0]} />
+          </BarChart>
+        </ChartContainer>
+      </ResponsiveContainer>
     </div>
   );
 }
