@@ -5,7 +5,7 @@ export const keys = {
   Budget: "buget",
   Wishlist: "wishlist",
   MonthlySummary: "monthly-summary",
-  ExpenseRange: "expense-range",
+  TransactionChart: "transaction-chart",
   Overview: "overview",
   Me: "me",
 };
